@@ -165,19 +165,19 @@
 ### Выбор инструментов
 - **Сборка**: Vite (быстрый dev-сервер, простой конфиг)
 - **Роутинг**: React Router v7 (SPA, каждый шаг чекаута — отдельный роут)
-- **Стили**: CSS Modules + БЭМ-нейминг (нулевой runtime, изоляция, читаемость)
+- **Стили**: CSS Modules + БЭМ (полное именование `block__element--modifier`)
 - **Состояние**: React Context + хуки (магазин достаточно простой, Redux избыточен)
-- **Кеширование**: собственный SWR-подобный кеш (кеш по ключу, фоновое обновление, инвалидация, dedup)
+- **Кеширование**: TanStack Query (проверенный кеш, dedup, инвалидация, фоновое обновление; транспортный слой — единый)
 - **Контракты**: `@checkout/contracts` напрямую (typebox-схемы + TS-типы)
 - **Валидация форм**: собственная (минимальная, без тяжёлых библиотек)
+- **Тесты**: Vitest — покрытие ключевых модулей (транспортный слой, API-хуки, кеш, поллинг)
 
 ### Структура apps/web/src
 ```
 src/
   api/
-    transport.ts          # единый механизм запросов
-    errors.ts             # ApiError, типы ошибок
-    cache.ts              # SWR-подобный кеш (ключ → данные + stale + подписки)
+    transport.ts          # единый механизм запросов (fetch + envelope + error)
+    errors.ts             # ApiError, ConflictError, NetworkError
     endpoints/
       session.ts
       catalog.ts
@@ -185,14 +185,11 @@ src/
       checkout.ts
       orders.ts
       payments.ts
-    hooks/
-      use-query.ts        # запросы из кеша + фоновое обновление
-      use-mutation.ts     # мутации (POST/PUT/DELETE) + инвалидация кеша
-      use-polling.ts      # поллинг с остановкой по условию
   lib/
     session.ts            # управление сессией (localStorage)
     idempotency.ts        # генерация/хранение Idempotency-Key
     format.ts             # форматирование копеек → рублей, телефонов
+    query-client.ts       # настройка TanStack Query
   pages/
     CatalogPage.tsx
     CartPage.tsx
@@ -213,6 +210,11 @@ src/
     ...
   App.tsx
   main.tsx
+test/
+  transport.test.ts       # разбор конверта, ошибки, идемпотентность
+  api-hooks.test.tsx      # query/mutation хуки через TanStack Query
+  polling.test.ts         # поллинг: старт, стоп, race conditions
+  session.test.ts         # создание/восстановление сессии
 ```
 
 ### Принцип DRY в API-клиенте
