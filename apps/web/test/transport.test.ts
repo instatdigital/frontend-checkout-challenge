@@ -74,41 +74,30 @@ describe('apiRequest', () => {
     );
   });
 
-  it('throws ConflictError on 409', async () => {
-    mockFetch({
-      ok: false,
+  it.each([
+    {
       status: 409,
-      json: async () => apiErrorEnvelope('CART_VERSION_CONFLICT', 'Конфликт версии корзины'),
-    });
-
-    await expect(apiRequest('POST', '/api/quotes', { body: {} })).rejects.toThrow(ConflictError);
-    await expect(apiRequest('POST', '/api/quotes', { body: {} })).rejects.toSatisfy(
-      (e: ConflictError) => e.code === 'CART_VERSION_CONFLICT' && e.status === 409,
-    );
-  });
-
-  it('throws ApiError on 401', async () => {
-    mockFetch({
-      ok: false,
+      code: 'CART_VERSION_CONFLICT',
+      message: 'Конфликт версии корзины',
+      ErrorType: ConflictError,
+    },
+    {
       status: 401,
-      json: async () => apiErrorEnvelope('SESSION_REQUIRED', 'Передайте токен'),
-    });
-
-    await expect(apiRequest('GET', '/api/cart')).rejects.toThrow(ApiError);
-    await expect(apiRequest('GET', '/api/cart')).rejects.toSatisfy(
-      (e: ApiError) => e.code === 'SESSION_REQUIRED' && e.status === 401,
-    );
-  });
-
-  it('throws ApiError on 404', async () => {
-    mockFetch({
-      ok: false,
+      code: 'SESSION_REQUIRED',
+      message: 'Передайте токен',
+      ErrorType: ApiError,
+    },
+    {
       status: 404,
-      json: async () => apiErrorEnvelope('ROUTE_NOT_FOUND', 'Маршрут не найден'),
-    });
+      code: 'ROUTE_NOT_FOUND',
+      message: 'Маршрут не найден',
+      ErrorType: ApiError,
+    },
+  ] as const)('throws $ErrorType.name on $status $code', async ({ status, code, message, ErrorType }) => {
+    mockFetch({ ok: false, status, json: async () => apiErrorEnvelope(code, message) });
 
-    await expect(apiRequest('GET', '/api/unknown')).rejects.toSatisfy(
-      (e: ApiError) => e.code === 'ROUTE_NOT_FOUND' && e.status === 404,
+    await expect(apiRequest('GET', '/api/test')).rejects.toSatisfy(
+      (e: ApiError) => e instanceof ErrorType && e.code === code && e.status === status,
     );
   });
 

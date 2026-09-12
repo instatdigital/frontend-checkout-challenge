@@ -18,18 +18,19 @@ describe('idempotency keys', () => {
     expect(keys.size).toBe(10);
   });
 
-  it('saves and loads order key', () => {
-    saveKey('order', 'key-order-1');
-    expect(loadKey('order')).toBe('key-order-1');
+  it.each([
+    { action: 'order' as const, key: 'key-order-1' },
+    { action: 'payment' as const, key: 'key-payment-1' },
+  ])('saves and loads $action key', ({ action, key }) => {
+    saveKey(action, key);
+    expect(loadKey(action)).toBe(key);
   });
 
-  it('saves and loads payment key', () => {
-    saveKey('payment', 'key-payment-1');
-    expect(loadKey('payment')).toBe('key-payment-1');
-  });
-
-  it('returns null when no key saved', () => {
-    expect(loadKey('order')).toBeNull();
+  it.each([
+    { action: 'order' as const },
+    { action: 'payment' as const },
+  ])('returns null when no $action key saved', ({ action }) => {
+    expect(loadKey(action)).toBeNull();
   });
 
   it('clearKey removes only the specified action', () => {

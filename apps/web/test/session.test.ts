@@ -15,50 +15,46 @@ describe('session storage', () => {
     localStorage.clear();
   });
 
-  describe('saveSession / loadSession', () => {
-    it('saves and loads session', () => {
-      saveSession('token-123', 'session-456');
-      expect(loadSession()).toEqual({ token: 'token-123', sessionId: 'session-456' });
-    });
-
-    it('returns null when nothing saved', () => {
-      expect(loadSession()).toBeNull();
-    });
-
-    it('returns null after clearSession', () => {
-      saveSession('token-123', 'session-456');
-      clearSession();
-      expect(loadSession()).toBeNull();
-    });
+  it.each([
+    {
+      name: 'session',
+      save: () => saveSession('token-123', 'session-456'),
+      load: loadSession,
+      expected: { token: 'token-123', sessionId: 'session-456' },
+    },
+    { name: 'orderId', save: () => saveOrderId('order-1'), load: loadOrderId, expected: 'order-1' },
+    {
+      name: 'paymentId',
+      save: () => savePaymentId('payment-1'),
+      load: loadPaymentId,
+      expected: 'payment-1',
+    },
+  ] as const)('saves and loads $name', ({ save, load, expected }) => {
+    save();
+    expect(load()).toEqual(expected);
   });
 
-  describe('orderId / paymentId', () => {
-    it('saves and loads orderId', () => {
-      saveOrderId('order-1');
-      expect(loadOrderId()).toBe('order-1');
-    });
+  it.each([
+    { name: 'session', load: loadSession },
+    { name: 'orderId', load: loadOrderId },
+    { name: 'paymentId', load: loadPaymentId },
+  ] as const)('returns null when no $name saved', ({ load }) => {
+    expect(load()).toBeNull();
+  });
 
-    it('returns null when no orderId', () => {
-      expect(loadOrderId()).toBeNull();
-    });
+  it('clears session', () => {
+    saveSession('token-123', 'session-456');
+    clearSession();
+    expect(loadSession()).toBeNull();
+  });
 
-    it('saves and loads paymentId', () => {
-      savePaymentId('payment-1');
-      expect(loadPaymentId()).toBe('payment-1');
-    });
-
-    it('returns null when no paymentId', () => {
-      expect(loadPaymentId()).toBeNull();
-    });
-
-    it('clearCheckout removes orderId and paymentId but keeps session', () => {
-      saveSession('token-123', 'session-456');
-      saveOrderId('order-1');
-      savePaymentId('payment-1');
-      clearCheckout();
-      expect(loadSession()).toEqual({ token: 'token-123', sessionId: 'session-456' });
-      expect(loadOrderId()).toBeNull();
-      expect(loadPaymentId()).toBeNull();
-    });
+  it('clearCheckout removes orderId and paymentId but keeps session', () => {
+    saveSession('token-123', 'session-456');
+    saveOrderId('order-1');
+    savePaymentId('payment-1');
+    clearCheckout();
+    expect(loadSession()).toEqual({ token: 'token-123', sessionId: 'session-456' });
+    expect(loadOrderId()).toBeNull();
+    expect(loadPaymentId()).toBeNull();
   });
 });
