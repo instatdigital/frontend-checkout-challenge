@@ -1,4 +1,4 @@
-import { NetworkError, parseErrorResponse } from './errors';
+import { ApiError, NetworkError, parseErrorResponse } from './errors';
 
 const BASE_URL = 'http://127.0.0.1:4000';
 
@@ -32,7 +32,7 @@ export async function apiRequest<T>(
     const body = await response.json();
     return body.data as T;
   } catch (error) {
-    if (error instanceof Error && error.name !== 'NetworkError') throw error;
+    if (error instanceof ApiError) throw error;
     throw new NetworkError(error);
   }
 }
