@@ -43,15 +43,15 @@
 
 Три файла, по функции на эндпоинт, делегируют transport:
 
-- `session.ts` — createSession, getSession
+- `session.ts` — createSession, getSession(sessionId, token)
 - `catalog.ts` — listProducts
 - `cart.ts` — getCart, getCartItem, setCartItem, removeCartItem
 
-Типы из `@checkout/contracts`.
+Типы из `@checkout/contracts`. Добавлены type-алиасы: Session, SessionInfo, CartItem, SetCartItem.
 
-Проверить D1: все запросы идут через apiRequest, компонентов с собственным fetch нет.
+D1 ✅: все запросы идут через apiRequest, компонентов с собственным fetch нет.
 
-~70 строк.
+~30 строк.
 
 ## 1.5. Эндпоинты: checkout, orders, payments (`src/api/endpoints/`)
 
@@ -103,7 +103,7 @@ QueryClientProvider в App.tsx.
 | 1   | Типы ошибок (`errors.ts`)             | ~40   | ✅     |
 | 2   | Транспортный слой (`transport.ts`)    | ~80   | ✅     |
 | 3   | Тесты транспорта                      | ~100  | ✅     |
-| 4   | Эндпоинты: session, catalog, cart     | ~70   | ⬜     |
+| 4   | Эндпоинты: session, catalog, cart     | ~30   | ✅     |
 | 5   | Эндпоинты: checkout, orders, payments | ~80   | ⬜     |
 | 6   | TanStack Query: провайдер + утилиты   | ~20   | ⬜     |
 | 7   | Хуки useQuery + useMutation           | ~50   | ⬜     |

@@ -201,8 +201,12 @@ export const IdempotencyHeaders = Type.Object({
   }),
 });
 
+export type Session = Static<typeof SessionSchema>;
+export type SessionInfo = Static<typeof SessionInfoSchema>;
 export type Product = Static<typeof ProductSchema>;
+export type CartItem = Static<typeof CartItemSchema>;
 export type Cart = Static<typeof CartSchema>;
+export type SetCartItem = Static<typeof SetCartItemBody>;
 export type Delivery = Static<typeof DeliverySchema>;
 export type Customer = Static<typeof CustomerSchema>;
 export type Quote = Static<typeof QuoteSchema>;
