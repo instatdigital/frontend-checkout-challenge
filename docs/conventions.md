@@ -2,13 +2,16 @@
 
 ## Верификация
 
-После **каждого** изменения файла — код, конфиг, документация — запускать проверки:
+После **каждого** изменения файла — код, конфиг, документация — запускать:
 
 ```bash
-npm run format:check && npm run build
+npm run format && npm run build -w @checkout/web && npm run lint -w @checkout/web
 ```
 
+`format` — автофикс, `build` — проверка типов и сборка, `lint` — oxlint.
+
 Для web-пакета дополнительно:
+
 ```bash
 npm run test -w @checkout/web
 ```
@@ -22,6 +25,7 @@ npm run test -w @checkout/web
 Документация и планы — тоже изменения, тоже в лимите.
 
 Правило:
+
 - Перед реализацией: оценить объём. Если > 300 строк — НЕ реализовывать.
 - Вместо реализации: сделать декомпозицию, сохранить в `docs/stage-N.M.md`.
 - Каждый пункт декомпозиции — отдельный шаг в следующем ходе.
@@ -32,6 +36,7 @@ npm run test -w @checkout/web
 ## DRY и обобщение
 
 Компонент **никогда** не работает с сырым `Response`:
+
 - Не вызывает `fetch()` напрямую
 - Не проверяет `response.ok`
 - Не парсит `response.json()`
@@ -64,3 +69,13 @@ Vitest. Покрытие ключевых модулей: транспортны
 ## Форматирование
 
 Prettier: `singleQuote: true`, `printWidth: 100`, `trailingComma: "all"`. Из `/.prettierrc.json`.
+
+## Shell-команды
+
+Не использовать `cd` в начале команд. Параметр `directory` в `run_shell_command` по умолчанию
+указывает на корень проекта. Если нужен другой каталог — передать через `directory`.
+
+Проверять объём изменений без учёта `package-lock.json`:
+```bash
+git diff --stat HEAD -- ':!package-lock.json'
+```

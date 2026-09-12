@@ -20,6 +20,7 @@ npm create vite@latest apps/web -- --template react-ts
 ```
 
 Это создаст готовую структуру:
+
 - `apps/web/package.json` (name: `web` → заменить на `@checkout/web`)
 - `apps/web/tsconfig.json`, `tsconfig.app.json`, `tsconfig.node.json`
 - `apps/web/vite.config.ts`
@@ -43,9 +44,11 @@ npm create vite@latest apps/web -- --template react-ts
    - `"noEmit": true` (сборку делает Vite)
 
 3. **vite.config.ts** — добавить алиас:
+
    ```ts
    resolve: { alias: { '@': path.resolve(__dirname, 'src') } }
    ```
+
    CORS не нужен: бэкенд разрешает localhost на любом порту.
    Базовый URL API задаётся в транспортном слое (Этап 1).
 
@@ -102,17 +105,16 @@ Prettier уже в корне. Проверить, что `apps/web` не иск
 
 ## Порядок выполнения
 
-| Шаг | Действие | Проверка |
-|---|---|---|
-| 1 | `npm create vite@latest apps/web -- --template react-ts` | Файлы сгенерированы |
-| 2 | Правка package.json: name, private, test-скрипт | — |
-| 3 | Правка tsconfig: extends, paths, moduleResolution, noEmit | — |
-| 4 | Правка vite.config.ts: алиас `@` | — |
-| 5 | Удалить eslint.config.js, src/App.css | — |
-| 6 | Создать vitest.config.ts | — |
-| 7 | `npm install -w @checkout/web` + доп. зависимости | lockfile обновлён |
-| 8 | `npx tsc -p apps/web/tsconfig.app.json` | типы без ошибок |
-| 9 | `npm run build -w @checkout/web` | dist/ создан |
-| 10 | `npm run dev -w @checkout/web` | Vite запущен, рендерит страницу |
-| 11 | `npm run test -w @checkout/web` | vitest запускается (0 тестов — ок) |
-| 12 | `npm run format:check` | prettier доволен |
+| Шаг | Действие                                                  | Проверка                           | Статус |
+| --- | --------------------------------------------------------- | ---------------------------------- | ------ |
+| 1   | `npm create vite@latest apps/web -- --template react-ts`  | Файлы сгенерированы                | ✅     |
+| 2   | Правка package.json: name, private, test-скрипт           | —                                  | ✅     |
+| 3   | Правка tsconfig: extends, paths, moduleResolution, noEmit | —                                  | ✅     |
+| 4   | Правка vite.config.ts: алиас `@`                          | —                                  | ✅     |
+| 5   | Создать vitest.config.ts                                  | —                                  | ✅     |
+| 6   | `npm install -w @checkout/web` + доп. зависимости         | lockfile обновлён                  | ✅     |
+| 7   | `npx tsc -p apps/web/tsconfig.app.json`                   | типы без ошибок                    | ✅     |
+| 8   | `npm run build -w @checkout/web`                          | dist/ создан                       | ✅     |
+| 9   | `npm run dev -w @checkout/web`                            | Vite запущен, рендерит страницу    | ✅     |
+| 10  | `npm run test -w @checkout/web`                           | vitest запускается (0 тестов — ок) | ✅     |
+| 11  | `npm run format:check`                                    | prettier доволен                   | ✅     |
