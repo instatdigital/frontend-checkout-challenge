@@ -31,3 +31,25 @@ export class NetworkError extends Error {
     this.cause = cause;
   }
 }
+
+export async function parseErrorResponse(response: Response): Promise<never> {
+  const status = response.status;
+  let code = 'UNKNOWN_ERROR';
+  let message = `HTTP ${status}`;
+  let fields: ReadonlyArray<{ path: string; message: string }> | undefined;
+
+  try {
+    const body = await response.json();
+    const error = body?.error;
+    if (error) {
+      code = error.code ?? code;
+      message = error.message ?? message;
+      fields = error.fields;
+    }
+  } catch {
+    // body not JSON — use defaults
+  }
+
+  if (status === 409) throw new ConflictError(code, message);
+  throw new ApiError(status, code, message, fields);
+}

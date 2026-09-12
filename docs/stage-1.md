@@ -49,6 +49,8 @@
 
 Типы из `@checkout/contracts`.
 
+Проверить D1: все запросы идут через apiRequest, компонентов с собственным fetch нет.
+
 ~70 строк.
 
 ## 1.5. Эндпоинты: checkout, orders, payments (`src/api/endpoints/`)
@@ -99,7 +101,7 @@ QueryClientProvider в App.tsx.
 | Шаг | Действие                              | Объём | Статус |
 | --- | ------------------------------------- | ----- | ------ |
 | 1   | Типы ошибок (`errors.ts`)             | ~40   | ✅     |
-| 2   | Транспортный слой (`transport.ts`)    | ~80   | ⬜     |
+| 2   | Транспортный слой (`transport.ts`)    | ~80   | ✅     |
 | 3   | Тесты транспорта                      | ~100  | ⬜     |
 | 4   | Эндпоинты: session, catalog, cart     | ~70   | ⬜     |
 | 5   | Эндпоинты: checkout, orders, payments | ~80   | ⬜     |
