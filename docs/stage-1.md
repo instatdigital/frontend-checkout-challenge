@@ -96,11 +96,15 @@ QueryClientProvider в main.tsx.
 
 ## 1.9. Тесты хуков (`test/api-hooks.test.tsx`)
 
-- useApiQuery: загрузка, данные, ошибка, refetch
-- useApiMutation: выполнение, loading, ошибка
-- usePolling: старт, остановка по условию, отмена при unmount
+7 тестов (2 файла, 17 всего):
 
-~80 строк.
+- useApiQuery: данные, ошибка (ApiError), refetch
+- useApiMutation: выполнение, ошибка (ApiError)
+- usePolling: остановка по shouldStop, остановка при unmount
+
+Изолированный QueryClient на каждый тест (gcTime: 0). Fake timers с shouldAdvanceTime.
+
+~95 строк.
 
 ---
 
@@ -116,4 +120,4 @@ QueryClientProvider в main.tsx.
 | 6   | TanStack Query: провайдер + утилиты   | ~12   | ✅     |
 | 7   | Хуки useQuery + useMutation           | ~25   | ✅     |
 | 8   | Хук usePolling                        | ~25   | ✅     |
-| 9   | Тесты хуков                           | ~80   | ⬜     |
+| 9   | Тесты хуков                           | ~95   | ✅     |
