@@ -11,143 +11,58 @@
 
 ---
 
-## 0.1. package.json
+## 0.1. Инициализация проекта
 
-Создать `apps/web/package.json`:
+Запустить `npm create vite@latest` с шаблоном `react-ts` в `apps/web`:
 
-```jsonc
-{
-  "name": "@checkout/web",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview"
-  }
-}
+```bash
+npm create vite@latest apps/web -- --template react-ts
 ```
 
-Зависимости:
-- `react`, `react-dom` — UI
-- `react-router` — роутинг (v7)
-- `@tanstack/react-query` — кеш/загрузка
-- `@checkout/contracts` — типы API
+Это создаст готовую структуру:
+- `apps/web/package.json` (name: `web` → заменить на `@checkout/web`)
+- `apps/web/tsconfig.json`, `tsconfig.app.json`, `tsconfig.node.json`
+- `apps/web/vite.config.ts`
+- `apps/web/index.html`
+- `apps/web/src/main.tsx`, `src/App.tsx`, `src/App.css`, `src/index.css`
+- `apps/web/vite-env.d.ts`
+- `apps/web/eslint.config.js` (удалить — линтер не нужен на этом этапе)
 
-Dev-зависимости:
-- `typescript` (из корня)
-- `vite`, `@vitejs/plugin-react` — сборка
-- `vitest`, `@testing-library/react`, `jsdom` — тесты
-- `@types/react`, `@types/react-dom`
+### Пост-генерация: правки под монорепо
 
-**Проверка**: `npm install -w @checkout/web` → корневой package-lock.json обновлён.
+1. **package.json** — переименовать workspace:
+   - `"name": "web"` → `"name": "@checkout/web"`
+   - Добавить `"private": true`
+   - Добавить скрипт `"test": "vitest run"`
+
+2. **tsconfig.json / tsconfig.app.json** — адаптировать под монорепо:
+   - `"extends": "../../tsconfig.base.json"` вместо дефолтного
+   - `"moduleResolution": "bundler"` (Vite-специфичное)
+   - `"jsx": "react-jsx"`
+   - Добавить `"paths": { "@/*": ["src/*"] }` в compilerOptions
+   - `"noEmit": true` (сборку делает Vite)
+
+3. **vite.config.ts** — добавить алиас:
+   ```ts
+   resolve: { alias: { '@': path.resolve(__dirname, 'src') } }
+   ```
+   CORS не нужен: бэкенд разрешает localhost на любом порту.
+   Базовый URL API задаётся в транспортном слое (Этап 1).
+
+4. **Удалить лишнее**: `eslint.config.js`, `src/App.css` (стили — CSS Modules)
+
+### Добавить зависимости
+
+```bash
+npm install -w @checkout/web react-router @tanstack/react-query @checkout/contracts
+npm install -w @checkout/web -D vitest @testing-library/react jsdom
+```
+
+**Проверка**: `npm install -w @checkout/web` → lockfile обновлён.
 
 ---
 
-## 0.2. tsconfig.json
-
-Создать `apps/web/tsconfig.json`:
-
-```jsonc
-{
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "target": "ES2023",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "jsx": "react-jsx",
-    "rootDir": "src",
-    "outDir": "dist",
-    "baseUrl": ".",
-    "paths": { "@/*": ["src/*"] },
-    "noEmit": true
-  },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "vite-env.d.ts"]
-}
-```
-
-Ключевые отличия от базового:
-- `moduleResolution: "bundler"` — Vite резолвит импорты, не Node
-- `jsx: "react-jsx"` — автоматический import React
-- `paths: { "@/*": ["src/*"] }` — алиас для чистых импортов
-- `noEmit: true` — Vite собирает, tsc только проверяет типы
-
----
-
-## 0.3. Vite-конфигурация
-
-Создать `apps/web/vite.config.ts`:
-
-```ts
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import path from 'node:path';
-
-export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: { '@': path.resolve(__dirname, 'src') },
-  },
-});
-```
-
-Алиас `@` → `src/` — синхронизирован с tsconfig paths.
-CORS не нужен: бэкенд разрешает `localhost` на любом порту по умолчанию.
-Базовый URL API (`http://127.0.0.1:4000`) задаётся в транспортном слое (Этап 1).
-
----
-
-## 0.4. Точки входа
-
-### `apps/web/index.html`
-```html
-<!doctype html>
-<html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Checkout Store</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
-```
-
-### `apps/web/src/main.tsx`
-```tsx
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { App } from './App';
-import './index.css';
-
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
-```
-
-### `apps/web/src/App.tsx`
-```tsx
-export function App() {
-  return <div>Checkout Store</div>;
-}
-```
-
-### `apps/web/src/index.css`
-Глобальные стили: сброс, шрифты, CSS-переменные для дизайн-токенов (цвета, отступы).
-
-### `apps/web/vite-env.d.ts`
-```ts
-/// <reference types="vite/client" />
-```
-
----
-
-## 0.5. Vitest-конфигурация
+## 0.2. Vitest-конфигурация
 
 Создать `apps/web/vitest.config.ts`:
 
@@ -168,22 +83,17 @@ export default defineConfig({
 });
 ```
 
-Добавить скрипт в package.json: `"test": "vitest run"`.
+---
+
+## 0.3. Интеграция с монорепо
+
+1. Корневой `npm run dev` не трогать — API и web запускаются отдельно
+2. Проверить: `npm run build -w @checkout/web` → собирается без ошибок
+3. Проверить: `npm run dev -w @checkout/web` → Vite запускается, страница открывается
 
 ---
 
-## 0.6. Интеграция с монорепо
-
-1. `npm install -w @checkout/web` → установить зависимости, обновить lockfile
-2. Обновить корневой `dev`-скрипт для запуска фронтенда параллельно с API:
-   - Добавить `concurrently` или использовать `npm run dev -w @checkout/web &`
-   - Или оставить ручной запуск двух терминалов (проще для тестового)
-3. Проверить: `npm run build -w @checkout/web` → собирается без ошибок
-4. Проверить: `npm run dev -w @checkout/web` → Vite запускается, страница открывается
-
----
-
-## 0.7. Prettier-интеграция
+## 0.4. Prettier-интеграция
 
 Prettier уже в корне. Проверить, что `apps/web` не исключён в `.prettierignore`.
 Запустить `npm run format:check` — новый код должен проходить.
@@ -194,16 +104,15 @@ Prettier уже в корне. Проверить, что `apps/web` не иск
 
 | Шаг | Действие | Проверка |
 |---|---|---|
-| 1 | Создать `apps/web/package.json` | — |
-| 2 | Создать `apps/web/tsconfig.json` | — |
-| 3 | Создать `apps/web/vite.config.ts` | — |
-| 4 | Создать `apps/web/vitest.config.ts` | — |
-| 5 | Создать `apps/web/index.html` | — |
-| 6 | Создать `apps/web/vite-env.d.ts` | — |
-| 7 | Создать `apps/web/src/main.tsx`, `App.tsx`, `index.css` | — |
-| 8 | `npm install -w @checkout/web` | lockfile обновлён |
-| 9 | `npx tsc -p apps/web/tsconfig.json` | типы без ошибок |
-| 10 | `npm run build -w @checkout/web` | dist/ создан |
-| 11 | `npm run dev -w @checkout/web` | Vite запущен, рендерит «Checkout Store» |
-| 12 | `npm run test -w @checkout/web` | vitest запускается (0 тестов — ок) |
-| 13 | `npm run format:check` | prettier доволен |
+| 1 | `npm create vite@latest apps/web -- --template react-ts` | Файлы сгенерированы |
+| 2 | Правка package.json: name, private, test-скрипт | — |
+| 3 | Правка tsconfig: extends, paths, moduleResolution, noEmit | — |
+| 4 | Правка vite.config.ts: алиас `@` | — |
+| 5 | Удалить eslint.config.js, src/App.css | — |
+| 6 | Создать vitest.config.ts | — |
+| 7 | `npm install -w @checkout/web` + доп. зависимости | lockfile обновлён |
+| 8 | `npx tsc -p apps/web/tsconfig.app.json` | типы без ошибок |
+| 9 | `npm run build -w @checkout/web` | dist/ создан |
+| 10 | `npm run dev -w @checkout/web` | Vite запущен, рендерит страницу |
+| 11 | `npm run test -w @checkout/web` | vitest запускается (0 тестов — ок) |
+| 12 | `npm run format:check` | prettier доволен |
