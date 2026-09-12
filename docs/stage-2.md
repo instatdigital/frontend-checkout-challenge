@@ -37,20 +37,20 @@ TDD: тесты с mock localStorage.
 
 ~20 строк + ~25 строк тестов.
 
-## 2.3. Провайдер сессии (`src/lib/session-context.tsx`)
+## 2.3. Провайдер сессии (`src/lib/session-context.ts` + `session-provider.tsx`)
 
 React-контекст, управляющий жизненным циклом сессии:
 
-- `SessionProvider` — обёртка в дереве компонентов
-- `useSession()` → `{ token, sessionId, isLoading, error }`
+- `session-context.ts` — SessionState, SessionContext, useSession()
+- `session-provider.tsx` — SessionProvider (только компонент, для fast refresh)
 - При монтировании: загрузка из localStorage → проверка через `getSession(sessionId, token)`
 - Если токен невалиден (401) → новая сессия
 - Если токена нет → новая сессия
 - Если валиден → использовать сохранённый
 
-TDD: renderHook + mock API-вызовы.
+Подключён в main.tsx: QueryClientProvider > SessionProvider > App.
 
-~50 строк + ~60 строк тестов.
+~70 строк + ~50 строк тестов.
 
 ---
 
@@ -60,4 +60,4 @@ TDD: renderHook + mock API-вызовы.
 | --- | -------------------------------- | --------- | ------ |
 | 1   | Хранилище сессии + тесты         | ~30 + ~40 | ✅     |
 | 2   | Idempotency-ключи + тесты        | ~18 + ~35 | ✅     |
-| 3   | Провайдер сессии + тесты         | ~50 + ~60 | ⬜     |
+| 3   | Провайдер сессии + тесты         | ~70 + ~50 | ✅     |
