@@ -87,8 +87,6 @@ export default defineConfig({
 });
 ```
 
-Статус: ✅ (реализовано на шаге 0.1)
-
 ---
 
 ## 0.3. Интеграция с монорепо
@@ -97,16 +95,12 @@ export default defineConfig({
 2. Проверить: `npm run build -w @checkout/web` → собирается без ошибок
 3. Проверить: `npm run dev -w @checkout/web` → Vite запускается, страница открывается
 
-Статус: ✅ (все проверки пройдены на шаге 0.1)
-
 ---
 
 ## 0.4. Prettier-интеграция
 
 Prettier уже в корне. Проверить, что `apps/web` не исключён в `.prettierignore`.
 Запустить `npm run format:check` — новый код должен проходить.
-
-Статус: ✅ (apps/web не исключён, format:check проходит)
 
 ---
 
