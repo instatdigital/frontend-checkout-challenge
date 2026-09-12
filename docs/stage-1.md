@@ -58,10 +58,12 @@ D1 ✅: все запросы идут через apiRequest, компонент
 Три файла:
 
 - `checkout.ts` — getCheckoutOptions, createQuote, getQuote
-- `orders.ts` — createOrder, listOrders, getOrder
-- `payments.ts` — listPayments, createPayment, getPayment, createSimulation, getSimulation
+- `orders.ts` — createOrder (idempotencyKey), listOrders, getOrder
+- `payments.ts` — listPayments, createPayment (idempotencyKey), getPayment, createSimulation, getSimulation
 
-~80 строк.
+Добавлены type-алиасы: CheckoutOptions, CreateQuote.
+
+~35 строк.
 
 ## 1.6. TanStack Query: провайдер и утилиты (`src/lib/query-client.ts`)
 
@@ -104,7 +106,7 @@ QueryClientProvider в App.tsx.
 | 2   | Транспортный слой (`transport.ts`)    | ~80   | ✅     |
 | 3   | Тесты транспорта                      | ~100  | ✅     |
 | 4   | Эндпоинты: session, catalog, cart     | ~30   | ✅     |
-| 5   | Эндпоинты: checkout, orders, payments | ~80   | ⬜     |
+| 5   | Эндпоинты: checkout, orders, payments | ~35   | ✅     |
 | 6   | TanStack Query: провайдер + утилиты   | ~20   | ⬜     |
 | 7   | Хуки useQuery + useMutation           | ~50   | ⬜     |
 | 8   | Хук usePolling                        | ~40   | ⬜     |
