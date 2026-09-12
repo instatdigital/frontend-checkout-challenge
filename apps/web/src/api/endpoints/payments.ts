@@ -13,8 +13,8 @@ export function createPayment(orderId: string, token: string, idempotencyKey: st
   });
 }
 
-export function getPayment(paymentId: string, token: string) {
-  return apiRequest<Payment>('GET', `/api/payments/${paymentId}`, { token });
+export function getPayment(paymentId: string, token: string, signal?: AbortSignal) {
+  return apiRequest<Payment>('GET', `/api/payments/${paymentId}`, { token, signal });
 }
 
 export function createSimulation(paymentId: string, scenario: Scenario, token: string) {
@@ -24,8 +24,15 @@ export function createSimulation(paymentId: string, scenario: Scenario, token: s
   });
 }
 
-export function getSimulation(paymentId: string, simulationId: string, token: string) {
-  return apiRequest<Simulation>('GET', `/api/payments/${paymentId}/simulations/${simulationId}`, {
-    token,
-  });
+export function getSimulation(
+  paymentId: string,
+  simulationId: string,
+  token: string,
+  signal?: AbortSignal,
+) {
+  return apiRequest<Simulation>(
+    'GET',
+    `/api/payments/${paymentId}/simulations/${simulationId}`,
+    { token, signal },
+  );
 }

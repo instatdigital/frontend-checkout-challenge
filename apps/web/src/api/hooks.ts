@@ -10,12 +10,12 @@ type ApiErrorType = ApiError | NetworkError;
 
 export function useApiQuery<T>(
   key: readonly unknown[],
-  fetcher: () => Promise<T>,
+  fetcher: (signal?: AbortSignal) => Promise<T>,
   options?: Omit<UseQueryOptions<T, ApiErrorType>, 'queryKey' | 'queryFn'>,
 ) {
   return useQuery<T, ApiErrorType>({
     queryKey: key,
-    queryFn: fetcher,
+    queryFn: ({ signal }) => fetcher(signal),
     ...options,
   });
 }

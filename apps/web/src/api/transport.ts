@@ -5,6 +5,7 @@ const BASE_URL = 'http://127.0.0.1:4000';
 type RequestOptions = {
   body?: unknown;
   idempotencyKey?: string;
+  signal?: AbortSignal;
   token?: string;
 };
 
@@ -24,6 +25,7 @@ export async function apiRequest<T>(
       method,
       headers,
       body: options?.body !== undefined ? JSON.stringify(options.body) : undefined,
+      signal: options?.signal,
     });
 
     if (!response.ok) return await parseErrorResponse(response);

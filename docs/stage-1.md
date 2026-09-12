@@ -85,10 +85,14 @@ QueryClientProvider в main.tsx.
 
 ## 1.8. Хук usePolling (`src/api/hooks/use-polling.ts`)
 
-Поллинг с интервалом (500–1000мс), остановка по условию (статус = терминальный),
-отмена при уходе со страницы (AbortController).
+Поллинг через `refetchInterval` TanStack Query:
+- `usePolling(key, fetcher, shouldStop, interval?, options?)` — data, isLoading, error
+- `shouldStop(data)` → `true` останавливает поллинг (терминальный статус)
+- `signal` пробрасывается через transport → fetch для отмены при unmount
 
-~40 строк.
+Добавлен `signal` в `RequestOptions` (transport.ts), `useApiQuery`, `getPayment`, `getSimulation`.
+
+~25 строк.
 
 ## 1.9. Тесты хуков (`test/api-hooks.test.tsx`)
 
@@ -111,5 +115,5 @@ QueryClientProvider в main.tsx.
 | 5   | Эндпоинты: checkout, orders, payments | ~35   | ✅     |
 | 6   | TanStack Query: провайдер + утилиты   | ~12   | ✅     |
 | 7   | Хуки useQuery + useMutation           | ~25   | ✅     |
-| 8   | Хук usePolling                        | ~40   | ⬜     |
+| 8   | Хук usePolling                        | ~25   | ✅     |
 | 9   | Тесты хуков                           | ~80   | ⬜     |
