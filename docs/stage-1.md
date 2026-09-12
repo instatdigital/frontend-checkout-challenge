@@ -72,14 +72,16 @@ QueryClientProvider в main.tsx.
 
 ~12 строк.
 
-## 1.7. Хук useQuery + хук useMutation (`src/api/hooks/`)
+## 1.7. Хуки useApiQuery + useApiMutation (`src/api/hooks.ts`)
 
-Обёртки над TanStack Query:
+Обёртки над TanStack Query с типизацией ошибок `ApiError | NetworkError`:
 
-- `useApiQuery(key, fetcher)` — loading, data, error, refetch
-- `useApiMutation(fetcher)` — loading, error, execute, reset
+- `useApiQuery(key, fetcher, options?)` — data, isLoading, error, refetch
+- `useApiMutation(mutationFn, options?)` — mutate, isPending, error, reset
 
-~50 строк.
+Компоненты импортируют только из `@/api/hooks`, не из `@tanstack/react-query`.
+
+~25 строк.
 
 ## 1.8. Хук usePolling (`src/api/hooks/use-polling.ts`)
 
@@ -108,6 +110,6 @@ QueryClientProvider в main.tsx.
 | 4   | Эндпоинты: session, catalog, cart     | ~30   | ✅     |
 | 5   | Эндпоинты: checkout, orders, payments | ~35   | ✅     |
 | 6   | TanStack Query: провайдер + утилиты   | ~12   | ✅     |
-| 7   | Хуки useQuery + useMutation           | ~50   | ⬜     |
+| 7   | Хуки useQuery + useMutation           | ~25   | ✅     |
 | 8   | Хук usePolling                        | ~40   | ⬜     |
 | 9   | Тесты хуков                           | ~80   | ⬜     |

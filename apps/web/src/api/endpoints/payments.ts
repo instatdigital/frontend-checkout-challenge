@@ -25,9 +25,7 @@ export function createSimulation(paymentId: string, scenario: Scenario, token: s
 }
 
 export function getSimulation(paymentId: string, simulationId: string, token: string) {
-  return apiRequest<Simulation>(
-    'GET',
-    `/api/payments/${paymentId}/simulations/${simulationId}`,
-    { token },
-  );
+  return apiRequest<Simulation>('GET', `/api/payments/${paymentId}/simulations/${simulationId}`, {
+    token,
+  });
 }
