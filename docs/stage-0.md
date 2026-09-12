@@ -27,7 +27,7 @@ npm create vite@latest apps/web -- --template react-ts
 - `apps/web/index.html`
 - `apps/web/src/main.tsx`, `src/App.tsx`, `src/App.css`, `src/index.css`
 - `apps/web/vite-env.d.ts`
-- `apps/web/eslint.config.js` (удалить — линтер не нужен на этом этапе)
+- `apps/web/.oxlintrc.json` (oxlint с плагинами react, typescript, oxc)
 
 ### Пост-генерация: правки под монорепо
 
@@ -52,7 +52,7 @@ npm create vite@latest apps/web -- --template react-ts
    CORS не нужен: бэкенд разрешает localhost на любом порту.
    Базовый URL API задаётся в транспортном слое (Этап 1).
 
-4. **Удалить лишнее**: `eslint.config.js`, `src/App.css` (стили — CSS Modules)
+4. **Удалить лишнее**: `src/App.css` (заменяется на CSS Modules на этапе стилей)
 
 ### Добавить зависимости
 
@@ -77,14 +77,17 @@ import path from 'node:path';
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: { '@': path.resolve(__dirname, 'src') },
+    alias: { '@': path.resolve(import.meta.dirname, 'src') },
   },
   test: {
     environment: 'jsdom',
     include: ['test/**/*.test.{ts,tsx}'],
+    passWithNoTests: true,
   },
 });
 ```
+
+Статус: ✅ (реализовано на шаге 0.1)
 
 ---
 
@@ -94,12 +97,16 @@ export default defineConfig({
 2. Проверить: `npm run build -w @checkout/web` → собирается без ошибок
 3. Проверить: `npm run dev -w @checkout/web` → Vite запускается, страница открывается
 
+Статус: ✅ (все проверки пройдены на шаге 0.1)
+
 ---
 
 ## 0.4. Prettier-интеграция
 
 Prettier уже в корне. Проверить, что `apps/web` не исключён в `.prettierignore`.
 Запустить `npm run format:check` — новый код должен проходить.
+
+Статус: ✅ (apps/web не исключён, format:check проходит)
 
 ---
 

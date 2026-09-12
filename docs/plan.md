@@ -71,12 +71,13 @@
 
 ## 4. Верхнеуровневый план работ
 
-### Этап 0. Скаффолдинг (apps/web)
+### Этап 0. Скаффолдинг (apps/web) ✅
 
 - Инициализация Vite + React + TypeScript workspace `@checkout/web`
 - Настройка путей: `@/` → `src/`, интеграция с монорепо (npm workspaces)
-- Базовые зависимости: react-router, стили (CSS Modules или Tailwind — на усмотрение)
-- Скрипты в package.json: `dev`, `build`, `preview`
+- Базовые зависимости: react-router, @tanstack/react-query, @checkout/contracts, vitest
+- Скрипты в package.json: `dev`, `build`, `preview`, `lint`, `test`
+- Oxlint с конфигом от Vite-шаблона (react, typescript, oxc)
 - Обновление корневого package-lock.json
 
 ### Этап 1. API-клиент (ядро DRY)
