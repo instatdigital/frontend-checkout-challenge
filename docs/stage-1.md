@@ -67,10 +67,10 @@ D1 ✅: все запросы идут через apiRequest, компонент
 
 ## 1.6. TanStack Query: провайдер и утилиты (`src/lib/query-client.ts`)
 
-Создание QueryClient с дефолтными настройками.
-QueryClientProvider в App.tsx.
+QueryClient с дефолтами: staleTime 60s, retry false, refetchOnWindowFocus false.
+QueryClientProvider в main.tsx.
 
-~20 строк.
+~12 строк.
 
 ## 1.7. Хук useQuery + хук useMutation (`src/api/hooks/`)
 
@@ -107,7 +107,7 @@ QueryClientProvider в App.tsx.
 | 3   | Тесты транспорта                      | ~100  | ✅     |
 | 4   | Эндпоинты: session, catalog, cart     | ~30   | ✅     |
 | 5   | Эндпоинты: checkout, orders, payments | ~35   | ✅     |
-| 6   | TanStack Query: провайдер + утилиты   | ~20   | ⬜     |
+| 6   | TanStack Query: провайдер + утилиты   | ~12   | ✅     |
 | 7   | Хуки useQuery + useMutation           | ~50   | ⬜     |
 | 8   | Хук usePolling                        | ~40   | ⬜     |
 | 9   | Тесты хуков                           | ~80   | ⬜     |
