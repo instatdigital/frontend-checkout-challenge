@@ -137,6 +137,10 @@
 - **ApiErrorType** — экспорт из errors.ts, убрать дубли из hooks.ts и use-polling.ts
 - **Рефакторинг страниц** — CatalogPage и CartPage на новые абстракции, убрать ручные типы мутаций, `unknown` → типы из endpoint-функций
 
+### Этап 4.6. Миграция на FSD ✅
+
+План: `docs/stage-fsd.md`. Переход от технической группировки (`api/`, `lib/`, `components/`, `pages/`) к доменной (FSD: `app/`, `pages/`, `entities/`, `shared/`).
+
 ### Этап 5. Чекаут (шаг 1: контакты + доставка)
 
 - Форма: имя, email, телефон — валидация на клиенте
