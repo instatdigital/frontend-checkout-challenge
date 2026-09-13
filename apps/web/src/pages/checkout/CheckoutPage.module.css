@@ -1,0 +1,14 @@
+.checkout {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.checkout__title {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.checkout__stub {
+  color: #888;
+}
