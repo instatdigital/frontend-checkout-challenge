@@ -53,3 +53,5 @@ export async function parseErrorResponse(response: Response): Promise<never> {
   if (status === 409) throw new ConflictError(code, message);
   throw new ApiError(status, code, message, fields);
 }
+
+export type ApiErrorType = ApiError | NetworkError;

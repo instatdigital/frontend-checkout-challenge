@@ -4,9 +4,7 @@ import {
   type UseQueryOptions,
   type UseMutationOptions,
 } from '@tanstack/react-query';
-import type { ApiError, NetworkError } from '@/api/errors';
-
-type ApiErrorType = ApiError | NetworkError;
+import type { ApiErrorType } from '@/api/errors';
 
 export function useApiQuery<T>(
   key: readonly unknown[],

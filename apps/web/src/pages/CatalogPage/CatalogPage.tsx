@@ -1,43 +1,45 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useApiQuery, useApiMutation } from '@/api/hooks';
+import { useApiQuery } from '@/api/hooks';
+import { useAuthMutation } from '@/api/auth-hooks';
+import { queryKeys } from '@/api/query-keys';
 import { listProducts } from '@/api/endpoints/catalog';
 import { setCartItem } from '@/api/endpoints/cart';
-import { useSession } from '@/lib/session-context';
+import type { ApiRequestBody } from '@/api/api-types';
 import { ProductCard } from '@/components/ProductCard/ProductCard';
+import { QueryGuard } from '@/components/QueryGuard/QueryGuard';
 import './CatalogPage.module.css';
 
-type AddToCartVars = {
-  productId: string;
-  body: { quantity: number };
-  token: string;
-};
-
 export function CatalogPage() {
-  const { token } = useSession();
   const queryClient = useQueryClient();
-  const { data: products, isLoading, error } = useApiQuery(['products'], () => listProducts());
-  const addToCart = useApiMutation<unknown, AddToCartVars>(
-    ({ productId, body, token }) => setCartItem(productId, body, token),
-    { onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cart'] }) },
+  const {
+    data: products,
+    isLoading,
+    error,
+  } = useApiQuery(queryKeys.products(), () => listProducts());
+  const addToCart = useAuthMutation(
+    ({ productId, body }: { productId: string; body: ApiRequestBody<'setCartItem'> }, token) =>
+      setCartItem(productId, body, token),
+    { onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.cart() }) },
   );
 
-  if (isLoading) return <p>Загрузка…</p>;
-  if (error) return <p>Ошибка: {error.message}</p>;
-  if (!products?.length) return <p>Товары не найдены</p>;
-
   const handleAddToCart = (productId: string) => {
-    if (!token) return;
-    addToCart.mutate({ productId, body: { quantity: 1 }, token });
+    addToCart.mutate({ productId, body: { quantity: 1 } });
   };
 
   return (
     <div className="catalog">
       <h1 className="catalog__title">Каталог</h1>
-      <div className="catalog__grid">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} onAddToCart={handleAddToCart} />
-        ))}
-      </div>
+      <QueryGuard isLoading={isLoading} error={error}>
+        {products?.length ? (
+          <div className="catalog__grid">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} onAddToCart={handleAddToCart} />
+            ))}
+          </div>
+        ) : (
+          <p>Товары не найдены</p>
+        )}
+      </QueryGuard>
     </div>
   );
 }

@@ -1,7 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import type { ApiError, NetworkError } from '@/api/errors';
-
-type ApiErrorType = ApiError | NetworkError;
+import type { ApiErrorType } from '@/api/errors';
 
 export function usePolling<T>(
   key: readonly unknown[],

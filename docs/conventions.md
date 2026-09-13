@@ -98,6 +98,10 @@ Endpoint-функции используют `ApiResponseData<Op, Status>` и `A
 ## Кеш
 
 TanStack Query. Инвалидация после мутаций. Компонент не дублирует логику кеширования.
+Query-ключи — через фабрику `queryKeys` из `src/api/query-keys.ts`.
+Авторизованные запросы — `useAuthQuery` / `useAuthMutation` из `src/api/auth-hooks.ts` (токен из контекста, без `token!`).
+Публичные запросы — `useApiQuery` / `useApiMutation` из `src/api/hooks.ts`.
+UI загрузки/ошибки — через `<QueryGuard>`, не через `if (isLoading)... if (error)...`.
 
 ## Тесты
 
