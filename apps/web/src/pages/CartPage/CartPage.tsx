@@ -23,7 +23,7 @@ export function CartPage() {
     data: cart,
     isLoading,
     error,
-  } = useApiQuery(['cart'], (signal) => getCart(token!, signal));
+  } = useApiQuery(['cart'], (signal) => getCart(token!, signal), { enabled: !!token });
   const updateItem = useApiMutation<unknown, SetCartItemVars>(({ productId, body, token }) =>
     setCartItem(productId, body, token),
   );
