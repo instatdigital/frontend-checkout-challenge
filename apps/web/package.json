@@ -8,8 +8,9 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "oxlint",
+    "lint:fsd": "node scripts/check-fsd.mjs",
     "test": "vitest run",
-    "gen:api": "openapi-typescript ../../docs/openapi.json -o src/api/openapi-types.ts"
+    "gen:api": "openapi-typescript ../../docs/openapi.json -o src/shared/api/openapi-types.ts"
   },
   "dependencies": {
     "@checkout/contracts": "^1.0.0",

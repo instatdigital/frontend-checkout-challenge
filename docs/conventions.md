@@ -5,7 +5,7 @@
 После каждого вызова `write_file` или `edit` — запускать:
 
 ```bash
-npm run format && npm run build -w @checkout/web && npm run lint -w @checkout/web && npm run test -w @checkout/web
+npm run format && npm run build -w @checkout/web && npm run lint -w @checkout/web && npm run lint:fsd -w @checkout/web && npm run test -w @checkout/web
 ```
 
 Если проверка падает — фиксить до перехода к следующему действию. Не пропускать, не откладывать.
