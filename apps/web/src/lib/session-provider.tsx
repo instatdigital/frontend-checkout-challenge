@@ -24,7 +24,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         try {
           await getSession(stored.sessionId, stored.token);
           if (!cancelled) {
-            setState({ token: stored.token, sessionId: stored.sessionId, isLoading: false, error: null });
+            setState({
+              token: stored.token,
+              sessionId: stored.sessionId,
+              isLoading: false,
+              error: null,
+            });
             return;
           }
         } catch (e) {

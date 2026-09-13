@@ -1,27 +1,42 @@
 import { apiRequest } from '@/api/transport';
-import type { Payment, Scenario, Simulation } from '@checkout/contracts';
+import type { ApiResponseData, ApiRequestBody } from '@/api/api-types';
 
 export function listPayments(orderId: string, token: string) {
-  return apiRequest<Payment[]>('GET', `/api/orders/${orderId}/payments`, { token });
+  return apiRequest<ApiResponseData<'listPayments', 200>>(
+    'GET',
+    `/api/orders/${orderId}/payments`,
+    {
+      token,
+    },
+  );
 }
 
 export function createPayment(orderId: string, token: string, idempotencyKey: string) {
-  return apiRequest<Payment>('POST', `/api/orders/${orderId}/payments`, {
-    body: {},
-    token,
-    idempotencyKey,
-  });
+  const body: ApiRequestBody<'createPayment'> = {};
+  return apiRequest<ApiResponseData<'createPayment', 201>>(
+    'POST',
+    `/api/orders/${orderId}/payments`,
+    { body, token, idempotencyKey },
+  );
 }
 
 export function getPayment(paymentId: string, token: string, signal?: AbortSignal) {
-  return apiRequest<Payment>('GET', `/api/payments/${paymentId}`, { token, signal });
+  return apiRequest<ApiResponseData<'getPayment', 200>>('GET', `/api/payments/${paymentId}`, {
+    token,
+    signal,
+  });
 }
 
-export function createSimulation(paymentId: string, scenario: Scenario, token: string) {
-  return apiRequest<Simulation>('POST', `/api/payments/${paymentId}/simulations`, {
-    body: { scenario },
-    token,
-  });
+export function createSimulation(
+  paymentId: string,
+  body: ApiRequestBody<'createSimulation'>,
+  token: string,
+) {
+  return apiRequest<ApiResponseData<'createSimulation', 201>>(
+    'POST',
+    `/api/payments/${paymentId}/simulations`,
+    { body, token },
+  );
 }
 
 export function getSimulation(
@@ -30,7 +45,7 @@ export function getSimulation(
   token: string,
   signal?: AbortSignal,
 ) {
-  return apiRequest<Simulation>(
+  return apiRequest<ApiResponseData<'getSimulation', 200>>(
     'GET',
     `/api/payments/${paymentId}/simulations/${simulationId}`,
     { token, signal },

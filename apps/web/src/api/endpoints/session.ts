@@ -1,10 +1,13 @@
 import { apiRequest } from '@/api/transport';
-import type { Session, SessionInfo } from '@checkout/contracts';
+import type { ApiResponseData, ApiRequestBody } from '@/api/api-types';
 
 export function createSession() {
-  return apiRequest<Session>('POST', '/api/sessions');
+  const body: ApiRequestBody<'createSession'> = {};
+  return apiRequest<ApiResponseData<'createSession', 201>>('POST', '/api/sessions', { body });
 }
 
 export function getSession(sessionId: string, token: string) {
-  return apiRequest<SessionInfo>('GET', `/api/sessions/${sessionId}`, { token });
+  return apiRequest<ApiResponseData<'getSession', 200>>('GET', `/api/sessions/${sessionId}`, {
+    token,
+  });
 }

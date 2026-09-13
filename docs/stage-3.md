@@ -31,7 +31,16 @@ TDD: `it.each` с парами kopecks → expected.
 
 ~40 строк.
 
-## 3.3. ProductCard (`src/components/ProductCard/`)
+## 3.3. Рефакторинг endpoints на OpenAPI-типы
+
+Endpoint-функции переведены с `@checkout/contracts` на типы из `api-types.ts`:
+
+- `ApiResponseData<Op, Status>` — тип ответа из OpenAPI
+- `ApiRequestBody<Op>` — тип тела запроса из OpenAPI
+- Аннотации типов вместо кастинга (`const body: ApiRequestBody<Op> = {}`)
+- `compat-check.ts` гарантирует совместимость контрактов и OpenAPI
+
+## 3.4. ProductCard (`src/components/ProductCard/`)
 
 Карточка товара: название, описание, цена, наличие, кнопка «В корзину».
 
@@ -61,9 +70,10 @@ TDD: render с mock API.
 
 ## Порядок выполнения
 
-| Шаг | Действие               | Объём             | Статус |
-| --- | ---------------------- | ----------------- | ------ |
-| 1   | Форматирование цен     | ~7 + ~18          | ✅     |
-| 2   | Роутинг и Layout       | ~55               | ✅     |
-| 3   | ProductCard + тесты    | ~30 + ~20 + ~25   | ⬜     |
-| 4   | CatalogPage + тесты    | ~40 + ~20 + ~30   | ⬜     |
+| Шаг | Действие              | Объём           | Статус |
+| --- | --------------------- | --------------- | ------ |
+| 1   | Форматирование цен    | ~7 + ~18        | ✅     |
+| 2   | Роутинг и Layout      | ~55             | ✅     |
+| 3   | Рефакторинг endpoints | ~75             | ✅     |
+| 4   | ProductCard + тесты   | ~30 + ~20 + ~25 | ⬜     |
+| 5   | CatalogPage + тесты   | ~40 + ~20 + ~30 | ⬜     |

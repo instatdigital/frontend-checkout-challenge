@@ -34,9 +34,9 @@ describe('useApiQuery', () => {
   });
 
   it('returns error on failed fetch', async () => {
-    const fetcher = vi.fn().mockRejectedValue(
-      new ApiError(401, 'SESSION_REQUIRED', 'Токен не передан'),
-    );
+    const fetcher = vi
+      .fn()
+      .mockRejectedValue(new ApiError(401, 'SESSION_REQUIRED', 'Токен не передан'));
 
     const { result } = renderHook(() => useApiQuery(['cart'], fetcher), {
       wrapper: createWrapper(),
@@ -77,9 +77,9 @@ describe('useApiMutation', () => {
   });
 
   it('returns error on failed mutation', async () => {
-    const mutationFn = vi.fn().mockRejectedValue(
-      new ApiError(409, 'CART_VERSION_CONFLICT', 'Конфликт версии'),
-    );
+    const mutationFn = vi
+      .fn()
+      .mockRejectedValue(new ApiError(409, 'CART_VERSION_CONFLICT', 'Конфликт версии'));
 
     const { result } = renderHook(() => useApiMutation(mutationFn), {
       wrapper: createWrapper(),
@@ -107,10 +107,9 @@ describe('usePolling', () => {
       .mockResolvedValueOnce({ status: 'succeeded' });
     const shouldStop = (d: { status: string }) => d.status !== 'pending';
 
-    const { result } = renderHook(
-      () => usePolling(['payment', 'p1'], fetcher, shouldStop, 1000),
-      { wrapper: createWrapper() },
-    );
+    const { result } = renderHook(() => usePolling(['payment', 'p1'], fetcher, shouldStop, 1000), {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(result.current.data!.status).toBe('pending');
@@ -124,15 +123,12 @@ describe('usePolling', () => {
   });
 
   it('stops polling on unmount', async () => {
-    const fetcher = vi.fn((_signal: AbortSignal) =>
-      Promise.resolve({ status: 'pending' }),
-    );
+    const fetcher = vi.fn((_signal: AbortSignal) => Promise.resolve({ status: 'pending' }));
     const shouldStop = () => false;
 
-    const { unmount } = renderHook(
-      () => usePolling(['payment', 'p2'], fetcher, shouldStop, 1000),
-      { wrapper: createWrapper() },
-    );
+    const { unmount } = renderHook(() => usePolling(['payment', 'p2'], fetcher, shouldStop, 1000), {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => expect(fetcher).toHaveBeenCalledTimes(1));
     unmount();

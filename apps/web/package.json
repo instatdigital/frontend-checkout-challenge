@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "oxlint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "gen:api": "openapi-typescript ../../docs/openapi.json -o src/api/openapi-types.ts"
   },
   "dependencies": {
     "@checkout/contracts": "^1.0.0",
@@ -24,6 +25,7 @@
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
     "jsdom": "^30.0.1",
+    "openapi-typescript": "^7.13.0",
     "oxlint": "^1.81.0",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",

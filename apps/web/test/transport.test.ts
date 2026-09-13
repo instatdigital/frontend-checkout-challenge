@@ -93,13 +93,16 @@ describe('apiRequest', () => {
       message: 'Маршрут не найден',
       ErrorType: ApiError,
     },
-  ] as const)('throws $ErrorType.name on $status $code', async ({ status, code, message, ErrorType }) => {
-    mockFetch({ ok: false, status, json: async () => apiErrorEnvelope(code, message) });
+  ] as const)(
+    'throws $ErrorType.name on $status $code',
+    async ({ status, code, message, ErrorType }) => {
+      mockFetch({ ok: false, status, json: async () => apiErrorEnvelope(code, message) });
 
-    await expect(apiRequest('GET', '/api/test')).rejects.toSatisfy(
-      (e: ApiError) => e instanceof ErrorType && e.code === code && e.status === status,
-    );
-  });
+      await expect(apiRequest('GET', '/api/test')).rejects.toSatisfy(
+        (e: ApiError) => e instanceof ErrorType && e.code === code && e.status === status,
+      );
+    },
+  );
 
   it('returns undefined for 204', async () => {
     mockFetch({ ok: true, status: 204 });

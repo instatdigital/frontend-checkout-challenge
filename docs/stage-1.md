@@ -86,6 +86,7 @@ QueryClientProvider в main.tsx.
 ## 1.8. Хук usePolling (`src/api/hooks/use-polling.ts`)
 
 Поллинг через `refetchInterval` TanStack Query:
+
 - `usePolling(key, fetcher, shouldStop, interval?, options?)` — data, isLoading, error
 - `shouldStop(data)` → `true` останавливает поллинг (терминальный статус)
 - `signal` пробрасывается через transport → fetch для отмены при unmount

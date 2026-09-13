@@ -8,9 +8,7 @@ describe('idempotency keys', () => {
 
   it('generateKey returns UUID format', () => {
     const key = generateKey();
-    expect(key).toMatch(
-      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
-    );
+    expect(key).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
   });
 
   it('generateKey returns unique values', () => {
@@ -26,12 +24,12 @@ describe('idempotency keys', () => {
     expect(loadKey(action)).toBe(key);
   });
 
-  it.each([
-    { action: 'order' as const },
-    { action: 'payment' as const },
-  ])('returns null when no $action key saved', ({ action }) => {
-    expect(loadKey(action)).toBeNull();
-  });
+  it.each([{ action: 'order' as const }, { action: 'payment' as const }])(
+    'returns null when no $action key saved',
+    ({ action }) => {
+      expect(loadKey(action)).toBeNull();
+    },
+  );
 
   it('clearKey removes only the specified action', () => {
     saveKey('order', 'key-order-1');

@@ -1,6 +1,6 @@
 import { apiRequest } from '@/api/transport';
-import type { Product } from '@checkout/contracts';
+import type { ApiResponseData } from '@/api/api-types';
 
 export function listProducts() {
-  return apiRequest<Product[]>('GET', '/api/products');
+  return apiRequest<ApiResponseData<'listProducts', 200>>('GET', '/api/products');
 }

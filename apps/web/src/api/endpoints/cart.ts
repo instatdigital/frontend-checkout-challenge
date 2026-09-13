@@ -1,16 +1,21 @@
 import { apiRequest } from '@/api/transport';
-import type { Cart, CartItem, SetCartItem } from '@checkout/contracts';
+import type { ApiResponseData, ApiRequestBody } from '@/api/api-types';
 
 export function getCart(token: string) {
-  return apiRequest<Cart>('GET', '/api/cart', { token });
+  return apiRequest<ApiResponseData<'getCart', 200>>('GET', '/api/cart', { token });
 }
 
 export function getCartItem(productId: string, token: string) {
-  return apiRequest<CartItem>('GET', `/api/cart/items/${productId}`, { token });
+  return apiRequest<ApiResponseData<'getCartItem', 200>>('GET', `/api/cart/items/${productId}`, {
+    token,
+  });
 }
 
-export function setCartItem(productId: string, body: SetCartItem, token: string) {
-  return apiRequest<CartItem>('PUT', `/api/cart/items/${productId}`, { body, token });
+export function setCartItem(productId: string, body: ApiRequestBody<'setCartItem'>, token: string) {
+  return apiRequest<ApiResponseData<'setCartItem', 200>>('PUT', `/api/cart/items/${productId}`, {
+    body,
+    token,
+  });
 }
 
 export function removeCartItem(productId: string, token: string) {
