@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import { useApiQuery, useApiMutation } from '@/api/hooks';
 import { getCart, setCartItem, removeCartItem } from '@/api/endpoints/cart';
 import { useSession } from '@/lib/session-context';
@@ -19,16 +20,20 @@ type RemoveCartItemVars = {
 
 export function CartPage() {
   const { token } = useSession();
+  const queryClient = useQueryClient();
   const {
     data: cart,
     isLoading,
     error,
   } = useApiQuery(['cart'], (signal) => getCart(token!, signal), { enabled: !!token });
-  const updateItem = useApiMutation<unknown, SetCartItemVars>(({ productId, body, token }) =>
-    setCartItem(productId, body, token),
+  const invalidateCart = { onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cart'] }) };
+  const updateItem = useApiMutation<unknown, SetCartItemVars>(
+    ({ productId, body, token }) => setCartItem(productId, body, token),
+    invalidateCart,
   );
-  const deleteItem = useApiMutation<unknown, RemoveCartItemVars>(({ productId, token }) =>
-    removeCartItem(productId, token),
+  const deleteItem = useApiMutation<unknown, RemoveCartItemVars>(
+    ({ productId, token }) => removeCartItem(productId, token),
+    invalidateCart,
   );
 
   const handleQuantityChange = (productId: string, quantity: number) => {

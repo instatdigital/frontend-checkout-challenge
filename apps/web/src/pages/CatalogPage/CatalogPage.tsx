@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useApiQuery, useApiMutation } from '@/api/hooks';
 import { listProducts } from '@/api/endpoints/catalog';
 import { setCartItem } from '@/api/endpoints/cart';
@@ -13,9 +14,11 @@ type AddToCartVars = {
 
 export function CatalogPage() {
   const { token } = useSession();
+  const queryClient = useQueryClient();
   const { data: products, isLoading, error } = useApiQuery(['products'], () => listProducts());
-  const addToCart = useApiMutation<unknown, AddToCartVars>(({ productId, body, token }) =>
-    setCartItem(productId, body, token),
+  const addToCart = useApiMutation<unknown, AddToCartVars>(
+    ({ productId, body, token }) => setCartItem(productId, body, token),
+    { onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cart'] }) },
   );
 
   if (isLoading) return <p>Загрузка…</p>;
