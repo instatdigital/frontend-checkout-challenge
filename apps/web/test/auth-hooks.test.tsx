@@ -2,13 +2,13 @@ import { describe, it, expect, vi } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
-import { useAuthQuery, useAuthMutation } from '@/api/auth-hooks';
+import { useAuthQuery, useAuthMutation } from '@/entities/session';
 
-vi.mock('@/lib/session-context', () => ({
+vi.mock('@/entities/session/model/session-context', () => ({
   useSession: vi.fn(),
 }));
 
-import { useSession } from '@/lib/session-context';
+import { useSession } from '@/entities/session/model/session-context';
 
 function wrapper({ children }: { children: ReactNode }) {
   const queryClient = new QueryClient({

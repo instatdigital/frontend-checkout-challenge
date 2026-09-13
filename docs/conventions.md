@@ -71,15 +71,15 @@ git diff --stat HEAD -- ':!package-lock.json'
 ## Стили
 
 - CSS Modules + БЭМ: `block__element--modifier`
-- Компонент = папка: `components/ProductCard/ProductCard.tsx` + `ProductCard.module.css`
-- Глобальный файл — только сброс и CSS-переменные
+- Компонент = папка внутри entity: `entities/product/ui/ProductCard.tsx` + `ProductCard.module.css`
+- Глобальный файл — только сброс и CSS-переменные (в `app/styles/index.css`)
 - Компонент и хук/тип/контекст — в разных файлах (fast refresh)
 
 ## API-запросы
 
 Типы из OpenAPI — источник истины для фронта. Генерация: `npm run gen:api -w @checkout/web`.
 Endpoint-функции используют `ApiResponseData<Op, Status>` и `ApiRequestBody<Op>` из `api-types.ts`.
-Файл совместимости `src/api/compat-check.ts` проверяет, что типы контрактов совпадают с OpenAPI.
+Файл совместимости `src/shared/api/compat-check.ts` проверяет, что типы контрактов совпадают с OpenAPI.
 Если `tsc` падает на `compat-check.ts` — контракты и OpenAPI разошлись (ошибка на бэкенде).
 
 Запрещён кастинг типов (`as Type`). Использовать аннотации (`const x: Type = value`) — TypeScript проверяет, кастинг обходит.
@@ -98,9 +98,9 @@ Endpoint-функции используют `ApiResponseData<Op, Status>` и `A
 ## Кеш
 
 TanStack Query. Инвалидация после мутаций. Компонент не дублирует логику кеширования.
-Query-ключи — через фабрику `queryKeys` из `src/api/query-keys.ts`.
-Авторизованные запросы — `useAuthQuery` / `useAuthMutation` из `src/api/auth-hooks.ts` (токен из контекста, без `token!`).
-Публичные запросы — `useApiQuery` / `useApiMutation` из `src/api/hooks.ts`.
+Query-ключи — фабрика в entity-слайсах: `productKeys` из `entities/product/api.ts`, `cartKeys` из `entities/cart/api.ts`.
+Авторизованные запросы — `useAuthQuery` / `useAuthMutation` из `entities/session/lib/auth-hooks.ts` (токен из контекста, без `token!`).
+Публичные запросы — `useApiQuery` / `useApiMutation` из `shared/api/hooks.ts`.
 UI загрузки/ошибки — через `<QueryGuard>`, не через `if (isLoading)... if (error)...`.
 
 ## Тесты
@@ -117,3 +117,20 @@ Prettier: `singleQuote: true`, `printWidth: 100`, `trailingComma: "all"`.
 
 Не использовать `cd`. Параметр `directory` в `run_shell_command` по умолчанию = корень проекта.
 Нужен другой каталог → передать через `directory`.
+
+## FSD (Feature-Sliced Design)
+
+Архитектура: `app → pages → entities → shared`. Зависимости только сверху вниз.
+
+- **app/** — провайдеры, роуты, лейаут, глобальные стили
+- **pages/** — страницы (слайс на роут): `pages/catalog/`, `pages/cart/`
+- **entities/** — доменные слайсы: `product/`, `cart/`, `session/`, `checkout/`, `order/`, `payment/`
+  - Каждый слайс: `api.ts`, `ui/`, `lib/`, `model/` (по необходимости), `index.ts` (публичный API)
+- **shared/** — инфраструктура без бизнес-логики: `api/` (транспорт, хуки), `ui/` (QueryGuard), `lib/` (format, idempotency, query-client)
+
+Правила:
+
+- Импорт между слоями — только через `index.ts` (публичный API слайса)
+- Entities не импортируют друг друга. Кросс-доменное взаимодействие — через pages
+- shared не зависит от entities (auth-hooks → entities/session, не shared)
+- Алиас `@/` → `src/`. Внутри слайса — относительные импорты (`../api`, `./errors`)

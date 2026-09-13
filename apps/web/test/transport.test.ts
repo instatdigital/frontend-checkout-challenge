@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { apiRequest } from '@/api/transport';
-import { ApiError, ConflictError, NetworkError } from '@/api/errors';
+import { apiRequest } from '@/shared/api/transport';
+import { ApiError, ConflictError, NetworkError } from '@/shared/api/errors';
 
 beforeEach(() => {
   vi.restoreAllMocks();

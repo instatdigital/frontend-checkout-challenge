@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { generateKey, saveKey, loadKey, clearKey } from '@/lib/idempotency';
+import { generateKey, saveKey, loadKey, clearKey } from '@/shared/lib/idempotency';
 
 describe('idempotency keys', () => {
   beforeEach(() => {

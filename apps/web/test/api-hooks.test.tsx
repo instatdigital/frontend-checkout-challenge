@@ -2,9 +2,9 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { ReactNode } from 'react';
-import { useApiQuery, useApiMutation } from '@/api/hooks';
-import { usePolling } from '@/api/hooks/use-polling';
-import { ApiError } from '@/api/errors';
+import { useApiQuery, useApiMutation } from '@/shared/api/hooks';
+import { usePolling } from '@/shared/api/hooks/use-polling';
+import { ApiError } from '@/shared/api/errors';
 
 function createWrapper() {
   const queryClient = new QueryClient({

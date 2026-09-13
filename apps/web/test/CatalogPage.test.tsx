@@ -3,17 +3,23 @@ import { render, screen, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
-import { CatalogPage } from '@/pages/CatalogPage/CatalogPage';
+import { CatalogPage } from '@/pages/catalog';
+import { listProducts } from '@/entities/product';
 
-vi.mock('@/api/endpoints/catalog', () => ({
-  listProducts: vi.fn(),
-}));
+vi.mock('@/entities/product', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/entities/product')>();
+  return {
+    ...actual,
+    listProducts: vi.fn(),
+  };
+});
 
-vi.mock('@/api/endpoints/cart', () => ({
+vi.mock('@/entities/cart', () => ({
   setCartItem: vi.fn(),
+  cartKeys: { detail: () => ['cart'] },
 }));
 
-vi.mock('@/lib/session-context', () => ({
+vi.mock('@/entities/session/model/session-context', () => ({
   useSession: () => ({ token: 'test-token', sessionId: 's-1', isLoading: false, error: null }),
 }));
 
@@ -49,7 +55,6 @@ const products = [
 
 describe('CatalogPage', () => {
   it('renders product cards from API', async () => {
-    const { listProducts } = await import('@/api/endpoints/catalog');
     vi.mocked(listProducts).mockResolvedValue(products);
 
     render(<CatalogPage />, { wrapper });
@@ -59,7 +64,6 @@ describe('CatalogPage', () => {
   });
 
   it('shows loading state', async () => {
-    const { listProducts } = await import('@/api/endpoints/catalog');
     vi.mocked(listProducts).mockReturnValue(new Promise(() => {}));
 
     render(<CatalogPage />, { wrapper });
@@ -68,7 +72,6 @@ describe('CatalogPage', () => {
   });
 
   it('shows error state', async () => {
-    const { listProducts } = await import('@/api/endpoints/catalog');
     vi.mocked(listProducts).mockRejectedValue(new Error('Network error'));
 
     render(<CatalogPage />, { wrapper });

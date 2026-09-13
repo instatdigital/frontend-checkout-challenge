@@ -8,7 +8,7 @@ import {
   savePaymentId,
   loadPaymentId,
   clearCheckout,
-} from '@/lib/session';
+} from '@/entities/session/lib/session';
 
 describe('session storage', () => {
   beforeEach(() => {

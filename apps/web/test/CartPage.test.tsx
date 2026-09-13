@@ -4,16 +4,21 @@ import '@testing-library/jest-dom/vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router';
 import type { ReactNode } from 'react';
-import { CartPage } from '@/pages/CartPage/CartPage';
+import { CartPage } from '@/pages/cart';
+import { getCart } from '@/entities/cart';
 import type { Cart } from '@checkout/contracts';
 
-vi.mock('@/api/endpoints/cart', () => ({
-  getCart: vi.fn(),
-  setCartItem: vi.fn(),
-  removeCartItem: vi.fn(),
-}));
+vi.mock('@/entities/cart', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/entities/cart')>();
+  return {
+    ...actual,
+    getCart: vi.fn(),
+    setCartItem: vi.fn(),
+    removeCartItem: vi.fn(),
+  };
+});
 
-vi.mock('@/lib/session-context', () => ({
+vi.mock('@/entities/session/model/session-context', () => ({
   useSession: () => ({ token: 'test-token', sessionId: 's-1', isLoading: false, error: null }),
 }));
 
@@ -43,7 +48,6 @@ const cart: Cart = {
 
 describe('CartPage', () => {
   it('renders cart items and subtotal', async () => {
-    const { getCart } = await import('@/api/endpoints/cart');
     vi.mocked(getCart).mockResolvedValue(cart);
 
     render(<CartPage />, { wrapper });
@@ -53,7 +57,6 @@ describe('CartPage', () => {
   });
 
   it('shows empty cart message', async () => {
-    const { getCart } = await import('@/api/endpoints/cart');
     vi.mocked(getCart).mockResolvedValue({ ...cart, items: [], quantity: 0, subtotal: 0 });
 
     render(<CartPage />, { wrapper });
@@ -62,7 +65,6 @@ describe('CartPage', () => {
   });
 
   it('shows loading state', async () => {
-    const { getCart } = await import('@/api/endpoints/cart');
     vi.mocked(getCart).mockReturnValue(new Promise(() => {}));
 
     render(<CartPage />, { wrapper });

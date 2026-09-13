@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
-import { CartItem } from '@/components/CartItem/CartItem';
+import { CartItem } from '@/entities/cart';
 import type { CartItem as CartItemType } from '@checkout/contracts';
 
 afterEach(cleanup);

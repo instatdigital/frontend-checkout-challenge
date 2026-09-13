@@ -88,37 +88,37 @@ src/
 
 ## Маппинг текущий → целевой
 
-| Текущее расположение                                  | Целевое                                     | Слой FSD  |
-| ----------------------------------------------------- | ------------------------------------------- | --------- |
-| `src/api/transport.ts`                                | `shared/api/transport.ts`                   | shared    |
-| `src/api/errors.ts`                                   | `shared/api/errors.ts`                      | shared    |
-| `src/api/api-types.ts`                                | `shared/api/api-types.ts`                   | shared    |
-| `src/api/openapi-types.ts`                            | `shared/api/openapi-types.ts`               | shared    |
-| `src/api/compat-check.ts`                             | `shared/api/compat-check.ts`                | shared    |
-| `src/api/hooks.ts`                                    | `shared/api/hooks.ts`                       | shared    |
-| `src/api/hooks/use-polling.ts`                        | `shared/api/hooks/use-polling.ts`           | shared    |
-| `src/api/query-keys.ts`                               | → расщепляется в entities/\*/api.ts          | —         |
-| `src/lib/format.ts`                                   | `shared/lib/format.ts`                      | shared    |
-| `src/lib/idempotency.ts`                              | `shared/lib/idempotency.ts`                 | shared    |
-| `src/lib/query-client.ts`                             | `shared/lib/query-client.ts`                | shared    |
-| `src/components/QueryGuard/`                           | `shared/ui/QueryGuard/`                     | shared    |
-| `src/api/endpoints/catalog.ts`                        | `entities/product/api.ts` + productKeys     | entities  |
-| `src/components/ProductCard/`                          | `entities/product/ui/`                      | entities  |
-| `src/api/endpoints/cart.ts`                            | `entities/cart/api.ts` + cartKeys           | entities  |
-| `src/components/CartItem/`                             | `entities/cart/ui/`                         | entities  |
-| `src/api/endpoints/session.ts`                         | `entities/session/api.ts`                   | entities  |
-| `src/lib/session-context.ts`                           | `entities/session/model/session-context.ts` | entities  |
-| `src/lib/session.ts`                                   | `entities/session/lib/session.ts`           | entities  |
-| `src/lib/session-provider.tsx`                         | `entities/session/lib/session-provider.tsx` | entities  |
-| `src/api/auth-hooks.ts`                                | `entities/session/lib/auth-hooks.ts`        | entities  |
-| `src/api/endpoints/checkout.ts`                        | `entities/checkout/api.ts`                  | entities  |
-| `src/api/endpoints/orders.ts`                          | `entities/order/api.ts`                     | entities  |
-| `src/api/endpoints/payments.ts`                        | `entities/payment/api.ts`                   | entities  |
-| `src/components/Layout/`                               | `app/layout.tsx`                            | app       |
-| `src/App.tsx` (маршруты)                              | `app/routes.tsx`                            | app       |
-| `src/pages/CatalogPage/`                               | `pages/catalog/`                            | pages     |
-| `src/pages/CartPage/`                                  | `pages/cart/`                               | pages     |
-| `src/main.tsx`                                         | `src/main.tsx` (упрощается, импорт из app/) | —         |
+| Текущее расположение            | Целевое                                     | Слой FSD |
+| ------------------------------- | ------------------------------------------- | -------- |
+| `src/api/transport.ts`          | `shared/api/transport.ts`                   | shared   |
+| `src/api/errors.ts`             | `shared/api/errors.ts`                      | shared   |
+| `src/api/api-types.ts`          | `shared/api/api-types.ts`                   | shared   |
+| `src/api/openapi-types.ts`      | `shared/api/openapi-types.ts`               | shared   |
+| `src/api/compat-check.ts`       | `shared/api/compat-check.ts`                | shared   |
+| `src/api/hooks.ts`              | `shared/api/hooks.ts`                       | shared   |
+| `src/api/hooks/use-polling.ts`  | `shared/api/hooks/use-polling.ts`           | shared   |
+| `src/api/query-keys.ts`         | → расщепляется в entities/\*/api.ts         | —        |
+| `src/lib/format.ts`             | `shared/lib/format.ts`                      | shared   |
+| `src/lib/idempotency.ts`        | `shared/lib/idempotency.ts`                 | shared   |
+| `src/lib/query-client.ts`       | `shared/lib/query-client.ts`                | shared   |
+| `src/components/QueryGuard/`    | `shared/ui/QueryGuard/`                     | shared   |
+| `src/api/endpoints/catalog.ts`  | `entities/product/api.ts` + productKeys     | entities |
+| `src/components/ProductCard/`   | `entities/product/ui/`                      | entities |
+| `src/api/endpoints/cart.ts`     | `entities/cart/api.ts` + cartKeys           | entities |
+| `src/components/CartItem/`      | `entities/cart/ui/`                         | entities |
+| `src/api/endpoints/session.ts`  | `entities/session/api.ts`                   | entities |
+| `src/lib/session-context.ts`    | `entities/session/model/session-context.ts` | entities |
+| `src/lib/session.ts`            | `entities/session/lib/session.ts`           | entities |
+| `src/lib/session-provider.tsx`  | `entities/session/lib/session-provider.tsx` | entities |
+| `src/api/auth-hooks.ts`         | `entities/session/lib/auth-hooks.ts`        | entities |
+| `src/api/endpoints/checkout.ts` | `entities/checkout/api.ts`                  | entities |
+| `src/api/endpoints/orders.ts`   | `entities/order/api.ts`                     | entities |
+| `src/api/endpoints/payments.ts` | `entities/payment/api.ts`                   | entities |
+| `src/components/Layout/`        | `app/layout.tsx`                            | app      |
+| `src/App.tsx` (маршруты)        | `app/routes.tsx`                            | app      |
+| `src/pages/CatalogPage/`        | `pages/catalog/`                            | pages    |
+| `src/pages/CartPage/`           | `pages/cart/`                               | pages    |
+| `src/main.tsx`                  | `src/main.tsx` (упрощается, импорт из app/) | —        |
 
 ## Ключевые решения
 
@@ -163,6 +163,7 @@ app → pages → entities → shared
 Перенести инфраструктурные файлы API в `shared/api/`, обновить все импорты.
 
 **Перемещения:**
+
 - `src/api/transport.ts` → `src/shared/api/transport.ts`
 - `src/api/errors.ts` → `src/shared/api/errors.ts`
 - `src/api/api-types.ts` → `src/shared/api/api-types.ts`
@@ -172,6 +173,7 @@ app → pages → entities → shared
 - `src/api/hooks/use-polling.ts` → `src/shared/api/hooks/use-polling.ts`
 
 **Обновить импорты в:**
+
 - 6 файлов endpoints (`@/api/transport` → `@/shared/api/transport`, `@/api/api-types` → `@/shared/api/api-types`)
 - `auth-hooks.ts` (`@/api/errors` → `@/shared/api/errors`)
 - `session-provider.tsx` (`@/api/errors` → `@/shared/api/errors`)
@@ -187,12 +189,14 @@ app → pages → entities → shared
 Перенести утилиты и QueryGuard в shared/.
 
 **Перемещения:**
+
 - `src/lib/format.ts` → `src/shared/lib/format.ts`
 - `src/lib/idempotency.ts` → `src/shared/lib/idempotency.ts`
 - `src/lib/query-client.ts` → `src/shared/lib/query-client.ts`
 - `src/components/QueryGuard/` → `src/shared/ui/QueryGuard/`
 
 **Обновить импорты в:**
+
 - `ProductCard.tsx` (`@/lib/format` → `@/shared/lib/format`)
 - `CartItem.tsx` (`@/lib/format` → `@/shared/lib/format`)
 - `main.tsx` (`@/lib/query-client` → `@/shared/lib/query-client`)
@@ -205,6 +209,7 @@ app → pages → entities → shared
 Создать entity-слайсы для product и cart. Расщепить query-keys.ts.
 
 **Создать:**
+
 - `src/entities/product/api.ts` — listProducts + `productKeys`
 - `src/entities/product/ui/ProductCard.tsx` + CSS
 - `src/entities/product/index.ts`
@@ -213,9 +218,11 @@ app → pages → entities → shared
 - `src/entities/cart/index.ts`
 
 **Расщепить:**
+
 - `src/api/query-keys.ts` → удалить, ключи перенесены в entity api.ts
 
 **Обновить импорты в:**
+
 - `CatalogPage.tsx`:
   - `@/api/endpoints/catalog` → `@/entities/product`
   - `@/api/endpoints/cart` → `@/entities/cart`
@@ -227,6 +234,7 @@ app → pages → entities → shared
   - аналогично
 
 **Удалить:**
+
 - `src/api/endpoints/catalog.ts`
 - `src/api/endpoints/cart.ts`
 - `src/api/query-keys.ts`
@@ -234,6 +242,7 @@ app → pages → entities → shared
 - `src/components/CartItem/`
 
 **Тесты:**
+
 - `ProductCard.test.tsx` — обновить импорт ProductCard
 - `CartItem.test.tsx` — обновить импорт CartItem
 - `CatalogPage.test.tsx` — обновить импорты
@@ -246,6 +255,7 @@ app → pages → entities → shared
 Создать entity-слайс для session, перенести контекст, провайдер, хранилище, auth-хуки.
 
 **Создать:**
+
 - `src/entities/session/api.ts` — createSession, getSession
 - `src/entities/session/model/session-context.ts`
 - `src/entities/session/lib/session.ts`
@@ -254,12 +264,14 @@ app → pages → entities → shared
 - `src/entities/session/index.ts`
 
 **Обновить импорты в:**
+
 - `main.tsx` (`@/lib/session-provider` → `@/entities/session`, `@/lib/query-client` → `@/shared/lib/query-client` — уже обновлено на шаге 2)
 - `CatalogPage.tsx` (`@/api/auth-hooks` → `@/entities/session`)
 - `CartPage.tsx` (`@/api/auth-hooks` → `@/entities/session`)
 - Тесты: `session-context.test.tsx`, `auth-hooks.test.tsx`, `session.test.ts`
 
 **Удалить:**
+
 - `src/api/endpoints/session.ts`
 - `src/api/auth-hooks.ts`
 - `src/lib/session-context.ts`
@@ -273,6 +285,7 @@ app → pages → entities → shared
 Перенести эндпоинты, которые не подключены к страницам.
 
 **Создать:**
+
 - `src/entities/checkout/api.ts` — getCheckoutOptions, createQuote, getQuote
 - `src/entities/checkout/index.ts`
 - `src/entities/order/api.ts` — createOrder, listOrders, getOrder
@@ -281,6 +294,7 @@ app → pages → entities → shared
 - `src/entities/payment/index.ts`
 
 **Удалить:**
+
 - `src/api/endpoints/checkout.ts`
 - `src/api/endpoints/orders.ts`
 - `src/api/endpoints/payments.ts`
@@ -294,16 +308,19 @@ app → pages → entities → shared
 Реструктурировать顶层: Layout → app, App.tsx → routes, main.tsx упрощается, pages переименовываются.
 
 **Создать:**
+
 - `src/app/layout.tsx` + `layout.module.css` — из `src/components/Layout/`
 - `src/app/providers.tsx` — композиция QueryClientProvider + SessionProvider
 - `src/app/routes.tsx` — BrowserRouter + Routes + Route из `src/App.tsx`
 - `src/app/styles/index.css` — из `src/index.css`
 
 **Обновить pages:**
+
 - `src/pages/CatalogPage/` → `src/pages/catalog/` (папка в нижнем регистре)
 - `src/pages/CartPage/` → `src/pages/cart/`
 
 **Обновить main.tsx:**
+
 ```tsx
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -318,6 +335,7 @@ createRoot(document.getElementById('root')!).render(
 ```
 
 **Удалить:**
+
 - `src/App.tsx`
 - `src/components/Layout/`
 - `src/index.css` (перемещён в app/styles/)

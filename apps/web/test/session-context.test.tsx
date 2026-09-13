@@ -1,14 +1,14 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { ReactNode } from 'react';
-import { SessionProvider } from '@/lib/session-provider';
-import { useSession } from '@/lib/session-context';
-import { createSession, getSession } from '@/api/endpoints/session';
-import { loadSession, saveSession, clearSession } from '@/lib/session';
-import { ApiError } from '@/api/errors';
+import { SessionProvider } from '@/entities/session';
+import { useSession } from '@/entities/session/model/session-context';
+import { createSession, getSession } from '@/entities/session/api';
+import { loadSession, saveSession, clearSession } from '@/entities/session/lib/session';
+import { ApiError } from '@/shared/api/errors';
 
-vi.mock('@/api/endpoints/session');
-vi.mock('@/lib/session');
+vi.mock('@/entities/session/api');
+vi.mock('@/entities/session/lib/session');
 
 const newSession = {
   id: 's-new',

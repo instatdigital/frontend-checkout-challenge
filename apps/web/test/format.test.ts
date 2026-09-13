@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatPrice } from '@/lib/format';
+import { formatPrice } from '@/shared/lib/format';
 
 const NBSP = '\u00A0';
 
