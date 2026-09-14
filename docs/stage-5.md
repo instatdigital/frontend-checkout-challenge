@@ -84,14 +84,17 @@
 - Email-regex: упрощён для `super-linear-regex`
 - Удалены: `.oxlintrc.json`, `scripts/check-fsd.mjs`, `validate-customer.ts`
 
-### Шаг 3. Выбор доставки (DeliveryForm)
+### Шаг 3. Выбор доставки (DeliveryForm) ✅
 
 - Компонент `entities/checkout/ui/DeliveryForm.tsx`
-- Получает `deliveryMethods` из CheckoutOptions
-- Переключатель: самовывоз / курьер
+- Получает `deliveryMethods`, `register`, `methodError`, `pickupPointError`, `addressErrors` (отдельные пропсы для ошибок — RHF `FieldErrors` не работает с union-типом `Delivery`)
+- Переключатель: самовывоз / курьер (radio, `useState` для UI-переключения)
 - При самовывозе — выбор пункта из списка
 - При курьере — поля адреса (city, street, house, apartment?)
-- Тест: рендер, переключение, выбор пункта, ввод адреса
+- `clsx` объектный синтаксис для условных классов ошибок
+- Константы `inputClass` / `inputError` для DRY
+- Стили: CSS Modules + БЭМ
+- Тест: рендер методов, пикап-пойнтов, переключение на курьер, отображение ошибок
 
 **≈ 150 строк**
 

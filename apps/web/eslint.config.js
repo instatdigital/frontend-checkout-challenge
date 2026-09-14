@@ -100,6 +100,7 @@ export default tseslint.config(
     rules: {
       'fsd-import/public-api-imports': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
       '@typescript-eslint/no-misused-promises': 'off',
       'react/display-name': 'off',
