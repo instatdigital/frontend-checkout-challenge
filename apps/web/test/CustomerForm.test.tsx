@@ -20,11 +20,11 @@ function renderWithForm(
   customer: CheckoutFormValues['customer'] = { name: '', email: '', phone: '' },
 ) {
   function Wrapper() {
-    const { register, formState } = useForm<CheckoutFormValues>({
+    const { control } = useForm<CheckoutFormValues>({
       defaultValues: { ...defaultFormValues, customer },
       mode: 'onBlur',
     });
-    return <CustomerForm register={register} errors={formState.errors} />;
+    return <CustomerForm control={control} />;
   }
   return render(<Wrapper />);
 }

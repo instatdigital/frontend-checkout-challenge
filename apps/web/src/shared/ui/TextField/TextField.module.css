@@ -1,0 +1,28 @@
+.text-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  color: #555;
+}
+
+.text-field__input {
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+.text-field__input:focus {
+  border-color: #4a90d9;
+}
+
+.text-field__input--error {
+  border-color: #d94a4a;
+}
+
+.text-field__error {
+  font-size: 12px;
+  color: #d94a4a;
+}

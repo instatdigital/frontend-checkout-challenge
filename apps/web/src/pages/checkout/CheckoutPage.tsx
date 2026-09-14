@@ -30,6 +30,7 @@ export function CheckoutPage() {
 
   const {
     register,
+    control,
     handleSubmit,
     watch,
     formState: { errors },
@@ -65,7 +66,7 @@ export function CheckoutPage() {
       <h1 className="checkout__title">Оформление заказа</h1>
       <QueryGuard isLoading={isLoading} error={error}>
         <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate>
-          <CustomerForm register={register} errors={errors} />
+          <CustomerForm control={control} />
           <DeliveryForm
             deliveryMethods={deliveryMethods}
             register={register}

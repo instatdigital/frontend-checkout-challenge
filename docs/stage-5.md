@@ -100,7 +100,7 @@
 
 Цель: DRY (убрать повтор input+clsx+error) + типобезопасность (Controller → FieldErrors не нужен).
 
-#### 4.1. TextField + интеграция в CustomerForm
+#### 4.1. TextField + интеграция в CustomerForm ✅
 
 - `shared/ui/TextField/TextField.tsx` + `.module.css`
 - `Controller` внутри: `field` + `fieldState.error`
