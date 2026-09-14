@@ -9,11 +9,7 @@ afterEach(cleanup);
 
 const defaultFormValues: CheckoutFormValues = {
   customer: { name: '', email: '', phone: '' },
-  delivery: {
-    method: 'pickup',
-    pickupPointId: 'point-center',
-    address: { city: '', street: '', house: '' },
-  },
+  delivery: { method: 'pickup', pickupPointId: 'point-center' },
 };
 
 function renderWithForm(

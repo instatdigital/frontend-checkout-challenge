@@ -7,7 +7,6 @@ import {
   checkoutKeys,
   getCheckoutOptions,
   createQuote,
-  toDelivery,
 } from '@/entities/checkout';
 import type { CheckoutFormValues } from '@/entities/checkout';
 import { QueryGuard } from '@/shared/ui/QueryGuard/QueryGuard';
@@ -34,7 +33,6 @@ export function CheckoutPage() {
       delivery: {
         method: 'pickup',
         pickupPointId: 'point-center',
-        address: { city: '', street: '', house: '' },
       },
     },
     mode: 'onBlur',
@@ -44,9 +42,7 @@ export function CheckoutPage() {
 
   const onSubmit = (data: CheckoutFormValues) => {
     if (!cart) return;
-    const deliveryValue = toDelivery(data.delivery);
-    if (!deliveryValue) return;
-    quoteMutation.mutate({ cartVersion: cart.version, delivery: deliveryValue });
+    quoteMutation.mutate({ cartVersion: cart.version, delivery: data.delivery });
   };
 
   return (

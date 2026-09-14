@@ -30,11 +30,7 @@ const deliveryMethods: CheckoutOptions['deliveryMethods'] = [
 
 const pickupDefaults: CheckoutFormValues = {
   customer: { name: '', email: '', phone: '' },
-  delivery: {
-    method: 'pickup',
-    pickupPointId: 'point-center',
-    address: { city: '', street: '', house: '' },
-  },
+  delivery: { method: 'pickup', pickupPointId: 'point-center' },
 };
 
 function TestWrapper({ defaults }: { defaults: CheckoutFormValues }) {

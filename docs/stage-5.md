@@ -124,14 +124,12 @@
 
 **≈ 200 строк**
 
-#### 4.3. Упрощение: возврат Delivery + удаление toDelivery
+#### 4.3. Возврат Delivery + удаление toDelivery ✅
 
 - `CheckoutFormValues.delivery`: `Delivery` вместо `CheckoutFormDelivery`
 - Удалить `CheckoutFormDelivery`, `toDelivery()` из `model/types.ts`
-- Удалить `useState` + `watch('delivery')` в CheckoutPage (условная отрисовка через Controller)
 - CheckoutPage: `data.delivery` напрямую в `createQuote`
-- Обновить тесты
+- `defaultValues` указывает только один вариант union
+- Тесты обновлены
 
-**≈ 50 строк**
-
-## Итого: 4 шага (3 подшага в шаге 4), ~750 строк нового кода
+## Итого: 4 шага (3 подшага в шаге 4), ~450 строк нового кода
