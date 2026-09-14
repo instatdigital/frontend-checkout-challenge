@@ -152,3 +152,28 @@ Prettier: `singleQuote: true`, `printWidth: 100`, `trailingComma: "all"`.
 - Entities не импортируют друг друга. Кросс-доменное взаимодействие — через pages
 - shared не зависит от entities (auth-hooks → entities/session, не shared)
 - Алиас `@/` → `src/`. Внутри слайса — относительные импорты (`../api`, `./errors`)
+
+## Саморефлексия: миграция на ESLint 9 + строгие правила
+
+### Что сделано
+
+- Миграция с oxlint на ESLint 9 (flat config)
+- Добавлены: `strict` TS, React, jsx-a11y, sonarjs, `eslint-plugin-fsd-import`
+- Lefthook pre-commit: format → build → lint → test
+- FSD: `layer-imports`, `slice-boundaries`, `public-api-imports` — вместо скрипта `check-fsd.mjs`
+- DRY: `no-restricted-syntax` (fetch вне transport), `sonarjs/no-identical-functions`, `sonarjs/no-duplicate-string`
+- Resilience: `no-floating-promises`, `no-misused-promises`
+- Сложность: `sonarjs/cognitive-complexity` (порог 15 по умолчанию)
+
+### Что оказалось не так
+
+1. **Отключение правил вместо фикса кода** — сначала несколько правил были выключены (off), хотя код можно было исправить. Пользователь указал: «Почему некоторые правила off?» и «Почему такой порог?» — правило: сначала фиксить код, off — только с обоснованием (например, `prefer-read-only-props` — React props уже readonly по контракту).
+2. **Cognitive complexity** — попытка поднять порог до 20 вместо рефакторинга. Правильный подход: дефолтный порог 15, рефакторить код (выделить `restoreSession`, `initSession`, `initFresh`).
+3. **ESLint 10 vs 9** — eslint-plugin-react несовместим с ESLint 10. Зафиксировать `eslint@^9`.
+4. **Flat config не массив** — `react.configs.flat.recommended` и `jsxA11y.flatConfigs.recommended` — объекты, не массивы. Нельзя спредить `...`, подключать напрямую.
+5. **`public-api-imports` и тесты** — тесты в `test/` не попадают в `testFilesPatterns`. Нужен override `files: ['test/**/*.test.{ts,tsx}']` с правилом `off`.
+6. **`sonarjs/super-linear-regex`** — email-паттерн `/^[^\s@]+@[^\s@]+\.[^\s@]+$/` → упрощён до `/^[^\s@]+@[^\s@]+\.[^\s@]$/` (убран квантификатор `+` после последней точки).
+
+### Правило: не ослаблять линтер
+
+Если ESLint ругается — сначала фиксить код. Отключить правило — только если есть техническое обоснование, не «чтобы не ругалось». Каждое off-правило — с комментарием-обоснованием в конфиге.

@@ -34,7 +34,7 @@ export function CustomerForm({ register, errors }: CustomerFormProps) {
           type="email"
           {...register('customer.email', {
             required: 'Email обязателен',
-            pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Некорректный email' },
+            pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]$/, message: 'Некорректный email' },
           })}
         />
         {errors.customer?.email && (

@@ -63,11 +63,26 @@
 - Компонент `entities/checkout/ui/CustomerForm.tsx`
 - Поля: имя, email, телефон
 - react-hook-form: `register` + `errors` из родителя, `mode: 'onBlur'`
-- Пер-field валидаторы: `validateName`, `validateEmail`, `validatePhone`
+- Встроенные правила RHF: `required`, `minLength`, `pattern`, `validate` (без отдельного файла-валидатора)
+- `errorModifier` константа для DRY (CSS-модификатор ошибки)
 - Стили: CSS Modules + БЭМ
-- Тест: рендер, валидация (waitFor для async blur), отсутствие ошибки до blur
+- Тест: `it.each` для required-ошибок + отдельные кейсы для pattern/minLength/validate, `waitFor` для async blur
 
 **≈ 150 строк**
+
+### Шаг 2а. Инфраструктура: ESLint 9 + lefthook ✅
+
+- Миграция с oxlint на ESLint 9 (flat config)
+- Наборы: `tseslint.configs.strict`, `react`, `jsx-a11y`, `sonarjs`
+- FSD: `eslint-plugin-fsd-import` (`layer-imports`, `slice-boundaries`, `public-api-imports`) — заменил скрипт `check-fsd.mjs`
+- DRY: `no-restricted-syntax` (запрет fetch вне transport), `sonarjs/no-identical-functions`, `sonarjs/no-duplicate-string`
+- Resilience: `no-floating-promises`, `no-misused-promises`
+- Lefthook pre-commit: format → build → lint → test
+- Рефакторинг `session-provider.tsx` (cognitive complexity < 15): `restoreSession`, `initSession`, `initFresh`
+- Фикс `main.tsx`: null guard вместо `!`
+- Фикс `CheckoutPage.tsx`: `void handleSubmit(...)` для no-misused-promises
+- Email-regex: упрощён для `super-linear-regex`
+- Удалены: `.oxlintrc.json`, `scripts/check-fsd.mjs`, `validate-customer.ts`
 
 ### Шаг 3. Выбор доставки (DeliveryForm)
 

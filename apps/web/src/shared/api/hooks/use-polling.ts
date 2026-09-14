@@ -11,7 +11,7 @@ export function usePolling<T>(
   return useQuery<T, ApiErrorType>({
     queryKey: key,
     queryFn: ({ signal }) => fetcher(signal),
-    refetchInterval: ({ state }) => {
+    refetchInterval: ({ state }): number | false => {
       if (!state.data) return interval;
       return shouldStop(state.data) ? false : interval;
     },

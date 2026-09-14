@@ -78,11 +78,8 @@ export default tseslint.config(
       'sonarjs/no-duplicate-string': 'warn',
       // Sonarjs: disable noisy or redundant rules
       'sonarjs/prefer-read-only-props': 'off',
-      'sonarjs/cognitive-complexity': 'off',
-      'sonarjs/class-name': 'off',
       'sonarjs/function-return-type': 'off',
-      'sonarjs/super-linear-regex': 'off',
-      'sonarjs/use-type-alias': 'off',
+      'sonarjs/cognitive-complexity': 'error',
       'sonarjs/no-nested-switch': 'off',
       'sonarjs/no-nested-conditional': 'off',
       'sonarjs/prefer-immediate-return': 'off',
