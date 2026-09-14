@@ -5,7 +5,7 @@
 После каждого вызова `write_file` или `edit` — запускать:
 
 ```bash
-npm run format && npm run build -w @checkout/web && npm run lint -w @checkout/web && npm run lint:fsd -w @checkout/web && npm run test -w @checkout/web
+npm run format && npm run build -w @checkout/web && npm run lint -w @checkout/web && npm run test -w @checkout/web
 ```
 
 Если проверка падает — фиксить до перехода к следующему действию. Не пропускать, не откладывать.
@@ -136,6 +136,7 @@ Prettier: `singleQuote: true`, `printWidth: 100`, `trailingComma: "all"`.
 ## FSD (Feature-Sliced Design)
 
 Архитектура: `app → pages → entities → shared`. Зависимости только сверху вниз.
+Проверяется ESLint (`eslint-plugin-fsd-import`): `layer-imports`, `slice-boundaries`, `public-api-imports`.
 
 - **app/** — провайдеры, роуты, лейаут, глобальные стили
 - **pages/** — страницы (слайс на роут): `pages/catalog/`, `pages/cart/`

@@ -8,7 +8,6 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "lint:fsd": "node scripts/check-fsd.mjs",
     "test": "vitest run",
     "gen:api": "openapi-typescript ../../docs/openapi.json -o src/shared/api/openapi-types.ts"
   },
@@ -29,6 +28,7 @@
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
     "eslint": "^10.10.0",
+    "eslint-plugin-fsd-import": "^0.1.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.6",
     "globals": "^17.12.0",
