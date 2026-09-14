@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import type { Product } from '@checkout/contracts';
 import { formatPrice } from '@/shared/lib/format';
 import './ProductCard.module.css';
@@ -15,7 +16,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
       <p className="card__description">{product.description}</p>
       <p className="card__price">{formatPrice(product.price)}</p>
       <button
-        className={`card__button${outOfStock ? ' card__button--disabled' : ''}`}
+        className={clsx('card__button', { 'card__button--disabled': outOfStock })}
         disabled={outOfStock}
         onClick={() => onAddToCart(product.id)}
       >

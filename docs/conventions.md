@@ -81,6 +81,7 @@ git diff --stat HEAD -- ':!package-lock.json'
 - Компонент = папка внутри entity: `entities/product/ui/ProductCard.tsx` + `ProductCard.module.css`
 - Глобальный файл — только сброс и CSS-переменные (в `app/styles/index.css`)
 - Компонент и хук/тип/контекст — в разных файлах (fast refresh)
+- Условные классы — через `clsx` объектный синтаксис: `clsx('block__element', { 'block__element--modifier': condition })`
 
 ## API-запросы
 

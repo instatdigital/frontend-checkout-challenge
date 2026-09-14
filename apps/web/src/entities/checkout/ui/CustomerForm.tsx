@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import type { UseFormRegister, FieldErrors } from 'react-hook-form';
 import type { Customer } from '@checkout/contracts';
 import './CustomerForm.module.css';
@@ -7,7 +8,8 @@ type CustomerFormProps = {
   errors: FieldErrors<{ customer: Customer }>;
 };
 
-const errorModifier = ' customer-form__input--error';
+const inputClass = 'customer-form__input';
+const inputError = 'customer-form__input--error';
 
 export function CustomerForm({ register, errors }: CustomerFormProps) {
   return (
@@ -16,7 +18,7 @@ export function CustomerForm({ register, errors }: CustomerFormProps) {
       <label className="customer-form__label">
         Имя
         <input
-          className={`customer-form__input${errors.customer?.name ? errorModifier : ''}`}
+          className={clsx(inputClass, { [inputError]: !!errors.customer?.name })}
           {...register('customer.name', {
             required: 'Имя обязательно',
             minLength: { value: 2, message: 'Минимум 2 символа' },
@@ -30,7 +32,7 @@ export function CustomerForm({ register, errors }: CustomerFormProps) {
       <label className="customer-form__label">
         Email
         <input
-          className={`customer-form__input${errors.customer?.email ? errorModifier : ''}`}
+          className={clsx(inputClass, { [inputError]: !!errors.customer?.email })}
           type="email"
           {...register('customer.email', {
             required: 'Email обязателен',
@@ -44,7 +46,7 @@ export function CustomerForm({ register, errors }: CustomerFormProps) {
       <label className="customer-form__label">
         Телефон
         <input
-          className={`customer-form__input${errors.customer?.phone ? errorModifier : ''}`}
+          className={clsx(inputClass, { [inputError]: !!errors.customer?.phone })}
           type="tel"
           {...register('customer.phone', {
             required: 'Телефон обязателен',
