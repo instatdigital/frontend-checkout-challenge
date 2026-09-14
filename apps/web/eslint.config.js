@@ -4,16 +4,18 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
+import sonarjs from 'eslint-plugin-sonarjs';
 import fsdImport from 'eslint-plugin-fsd-import';
 import globals from 'globals';
 
 export default tseslint.config(
-  { ignores: ['dist'] },
+  { ignores: ['dist', 'src/shared/api/openapi-types.ts'] },
   js.configs.recommended,
   ...tseslint.configs.strict,
   react.configs.flat.recommended,
   react.configs.flat['jsx-runtime'],
   jsxA11y.flatConfigs.recommended,
+  sonarjs.configs.recommended,
   {
     settings: {
       react: { version: 'detect' },
@@ -23,6 +25,10 @@ export default tseslint.config(
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       globals: globals.browser,
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
     settings: {
       react: { version: 'detect' },
@@ -55,6 +61,31 @@ export default tseslint.config(
       // TypeScript
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-invalid-void-type': 'off',
+      // Resilience: no floating promises, no misused promises
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/no-misused-promises': 'error',
+      // DRY: no direct fetch outside transport layer
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'CallExpression[callee.name="fetch"]',
+          message:
+            'Use apiRequest() from shared/api/transport — direct fetch is not allowed in components',
+        },
+      ],
+      // Sonarjs: DRY rules
+      'sonarjs/no-identical-functions': 'warn',
+      'sonarjs/no-duplicate-string': 'warn',
+      // Sonarjs: disable noisy or redundant rules
+      'sonarjs/prefer-read-only-props': 'off',
+      'sonarjs/cognitive-complexity': 'off',
+      'sonarjs/class-name': 'off',
+      'sonarjs/function-return-type': 'off',
+      'sonarjs/super-linear-regex': 'off',
+      'sonarjs/use-type-alias': 'off',
+      'sonarjs/no-nested-switch': 'off',
+      'sonarjs/no-nested-conditional': 'off',
+      'sonarjs/prefer-immediate-return': 'off',
     },
   },
   {
@@ -64,11 +95,21 @@ export default tseslint.config(
     },
   },
   {
+    files: ['src/shared/api/transport.ts'],
+    rules: {
+      'no-restricted-syntax': 'off',
+    },
+  },
+  {
     files: ['test/**/*.test.{ts,tsx}'],
     rules: {
       'fsd-import/public-api-imports': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
       'react/display-name': 'off',
+      'sonarjs/no-identical-functions': 'off',
+      'sonarjs/no-duplicate-string': 'off',
     },
   },
 );

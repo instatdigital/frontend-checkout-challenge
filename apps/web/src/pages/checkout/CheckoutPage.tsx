@@ -25,7 +25,7 @@ export function CheckoutPage() {
   return (
     <div className="checkout">
       <h1 className="checkout__title">Оформление заказа</h1>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate>
         <CustomerForm register={register} errors={errors} />
         <button className="checkout__submit" type="submit">
           Продолжить

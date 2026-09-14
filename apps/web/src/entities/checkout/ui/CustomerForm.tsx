@@ -7,6 +7,8 @@ type CustomerFormProps = {
   errors: FieldErrors<{ customer: Customer }>;
 };
 
+const errorModifier = ' customer-form__input--error';
+
 export function CustomerForm({ register, errors }: CustomerFormProps) {
   return (
     <div className="customer-form">
@@ -14,7 +16,7 @@ export function CustomerForm({ register, errors }: CustomerFormProps) {
       <label className="customer-form__label">
         Имя
         <input
-          className={`customer-form__input${errors.customer?.name ? ' customer-form__input--error' : ''}`}
+          className={`customer-form__input${errors.customer?.name ? errorModifier : ''}`}
           {...register('customer.name', {
             required: 'Имя обязательно',
             minLength: { value: 2, message: 'Минимум 2 символа' },
@@ -28,7 +30,7 @@ export function CustomerForm({ register, errors }: CustomerFormProps) {
       <label className="customer-form__label">
         Email
         <input
-          className={`customer-form__input${errors.customer?.email ? ' customer-form__input--error' : ''}`}
+          className={`customer-form__input${errors.customer?.email ? errorModifier : ''}`}
           type="email"
           {...register('customer.email', {
             required: 'Email обязателен',
@@ -42,7 +44,7 @@ export function CustomerForm({ register, errors }: CustomerFormProps) {
       <label className="customer-form__label">
         Телефон
         <input
-          className={`customer-form__input${errors.customer?.phone ? ' customer-form__input--error' : ''}`}
+          className={`customer-form__input${errors.customer?.phone ? errorModifier : ''}`}
           type="tel"
           {...register('customer.phone', {
             required: 'Телефон обязателен',

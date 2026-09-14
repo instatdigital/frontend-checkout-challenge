@@ -57,7 +57,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    init();
+    void init();
     return () => {
       cancelled = true;
     };
