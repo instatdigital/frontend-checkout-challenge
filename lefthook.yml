@@ -4,6 +4,7 @@ pre-commit:
       glob: '*'
       run: >
         npm run format
+        && npx tsc --noEmit -p apps/web/tsconfig.test.json
         && npm run build -w @checkout/web
         && npm run lint -w @checkout/web
         && npm run test -w @checkout/web

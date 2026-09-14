@@ -1,10 +1,14 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
+import { useForm } from 'react-hook-form';
+import type { FieldError } from 'react-hook-form';
+import type { Delivery, CheckoutOptions } from '@checkout/contracts';
 import { DeliveryForm } from '@/entities/checkout';
-import type { CheckoutOptions } from '@checkout/contracts';
 
 afterEach(cleanup);
+
+type FormValues = { delivery: Delivery };
 
 const deliveryMethods: CheckoutOptions['deliveryMethods'] = [
   {
@@ -26,28 +30,51 @@ const deliveryMethods: CheckoutOptions['deliveryMethods'] = [
   },
 ];
 
-const stubRegister = ((name: string) => ({
-  name,
-  onChange: async () => {},
-  onBlur: async () => {},
-  ref: () => {},
-})) as any;
+const pickupDefaults: FormValues = {
+  delivery: { method: 'pickup', pickupPointId: 'point-center' },
+};
+const courierDefaults: FormValues = {
+  delivery: { method: 'courier', address: { city: '', street: '', house: '' } },
+};
+
+function TestWrapper({
+  defaults,
+  addressErrors,
+}: {
+  defaults: FormValues;
+  addressErrors?: {
+    city?: FieldError;
+    street?: FieldError;
+    house?: FieldError;
+    apartment?: FieldError;
+  };
+}) {
+  const { register } = useForm<FormValues>({ defaultValues: defaults, mode: 'onBlur' });
+
+  return (
+    <DeliveryForm
+      deliveryMethods={deliveryMethods}
+      register={register}
+      addressErrors={addressErrors}
+    />
+  );
+}
 
 describe('DeliveryForm', () => {
   it('renders delivery methods as radio buttons', () => {
-    render(<DeliveryForm deliveryMethods={deliveryMethods} register={stubRegister} />);
+    render(<TestWrapper defaults={pickupDefaults} />);
     expect(screen.getByLabelText('Самовывоз')).toBeInTheDocument();
     expect(screen.getByLabelText('Курьер')).toBeInTheDocument();
   });
 
   it('shows pickup points when pickup is selected', () => {
-    render(<DeliveryForm deliveryMethods={deliveryMethods} register={stubRegister} />);
+    render(<TestWrapper defaults={pickupDefaults} />);
     expect(screen.getByText('Пункт Центр')).toBeInTheDocument();
     expect(screen.getByText('Пункт Север')).toBeInTheDocument();
   });
 
   it('shows address fields when courier is selected', async () => {
-    render(<DeliveryForm deliveryMethods={deliveryMethods} register={stubRegister} />);
+    render(<TestWrapper defaults={pickupDefaults} />);
     fireEvent.click(screen.getByLabelText('Курьер'));
     await waitFor(() => {
       expect(screen.getByLabelText('Город')).toBeInTheDocument();
@@ -59,9 +86,8 @@ describe('DeliveryForm', () => {
 
   it('shows address error messages', async () => {
     render(
-      <DeliveryForm
-        deliveryMethods={deliveryMethods}
-        register={stubRegister}
+      <TestWrapper
+        defaults={courierDefaults}
         addressErrors={{ city: { type: 'required', message: 'Город обязателен' } }}
       />,
     );
