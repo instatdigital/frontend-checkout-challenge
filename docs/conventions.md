@@ -108,11 +108,21 @@ Query-ключи — фабрика в entity-слайсах: `productKeys` из
 Публичные запросы — `useApiQuery` / `useApiMutation` из `shared/api/hooks.ts`.
 UI загрузки/ошибки — через `<QueryGuard>`, не через `if (isLoading)... if (error)...`.
 
+## Формы (react-hook-form)
+
+- `useForm` с `mode: 'onBlur'` — валидация при потере фокуса
+- Использовать встроенные правила RHF: `required`, `minLength`, `maxLength`, `pattern`
+- `validate` — только для проверок, которые не покрываются встроенными правилами
+- Компонент формы получает `register: UseFormRegister<FormValues>` и `errors: FieldErrors<FormValues>` от родителя
+- Тип формы — в странице: `type CheckoutFormValues = { customer: Customer; ... }`
+- Не создавать отдельные функции-валидаторы, если RHF встроенные правила достаточны
+
 ## Тесты
 
 TDD: сначала тест, потом реализация. Тест и реализация — в одном шаге.
 Vitest. Покрытие ключевых модулей: транспортный слой, API-хуки, поллинг, сессия.
 Для однотипных проверок — `it.each([{input, output}, ...])`, не писать отдельный `it` на каждый кейс.
+Тесты react-hook-form: валидация асинхронна в jsdom — использовать `waitFor` после `fireEvent.blur`.
 
 ## Форматирование
 

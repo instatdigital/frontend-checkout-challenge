@@ -58,13 +58,14 @@
 
 **≈ 30 строк**
 
-### Шаг 2. Форма контактов (CustomerForm)
+### Шаг 2. Форма контактов (CustomerForm) ✅
 
 - Компонент `entities/checkout/ui/CustomerForm.tsx`
 - Поля: имя, email, телефон
-- Валидация: паттерны из контракта (`\S`, email format, `^\+[1-9]\d{9,14}$`)
+- react-hook-form: `register` + `errors` из родителя, `mode: 'onBlur'`
+- Пер-field валидаторы: `validateName`, `validateEmail`, `validatePhone`
 - Стили: CSS Modules + БЭМ
-- Тест: рендер, валидация, onChange
+- Тест: рендер, валидация (waitFor для async blur), отсутствие ошибки до blur
 
 **≈ 150 строк**
 

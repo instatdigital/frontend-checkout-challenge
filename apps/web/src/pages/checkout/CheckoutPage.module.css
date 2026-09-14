@@ -9,6 +9,9 @@
   margin-bottom: 16px;
 }
 
-.checkout__stub {
-  color: #888;
+.checkout__submit {
+  margin-top: 16px;
+  padding: 10px 24px;
+  font-size: 16px;
+  cursor: pointer;
 }
