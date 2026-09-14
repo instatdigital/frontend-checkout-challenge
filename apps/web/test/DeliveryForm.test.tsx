@@ -3,12 +3,11 @@ import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/re
 import '@testing-library/jest-dom/vitest';
 import { useForm } from 'react-hook-form';
 import type { FieldError } from 'react-hook-form';
-import type { Delivery, CheckoutOptions } from '@checkout/contracts';
+import type { CheckoutOptions } from '@checkout/contracts';
 import { DeliveryForm } from '@/entities/checkout';
+import type { CheckoutFormValues } from '@/entities/checkout';
 
 afterEach(cleanup);
-
-type FormValues = { delivery: Delivery };
 
 const deliveryMethods: CheckoutOptions['deliveryMethods'] = [
   {
@@ -30,18 +29,24 @@ const deliveryMethods: CheckoutOptions['deliveryMethods'] = [
   },
 ];
 
-const pickupDefaults: FormValues = {
-  delivery: { method: 'pickup', pickupPointId: 'point-center' },
+const pickupDefaults: CheckoutFormValues = {
+  customer: { name: '', email: '', phone: '' },
+  delivery: {
+    method: 'pickup',
+    pickupPointId: 'point-center',
+    address: { city: '', street: '', house: '' },
+  },
 };
-const courierDefaults: FormValues = {
-  delivery: { method: 'courier', address: { city: '', street: '', house: '' } },
+const courierDefaults: CheckoutFormValues = {
+  customer: { name: '', email: '', phone: '' },
+  delivery: { method: 'courier', pickupPointId: '', address: { city: '', street: '', house: '' } },
 };
 
 function TestWrapper({
   defaults,
   addressErrors,
 }: {
-  defaults: FormValues;
+  defaults: CheckoutFormValues;
   addressErrors?: {
     city?: FieldError;
     street?: FieldError;
@@ -49,7 +54,7 @@ function TestWrapper({
     apartment?: FieldError;
   };
 }) {
-  const { register } = useForm<FormValues>({ defaultValues: defaults, mode: 'onBlur' });
+  const { register } = useForm<CheckoutFormValues>({ defaultValues: defaults, mode: 'onBlur' });
 
   return (
     <DeliveryForm

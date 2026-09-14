@@ -2,15 +2,26 @@ import { describe, it, expect, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { useForm } from 'react-hook-form';
-import type { Customer } from '@checkout/contracts';
+import type { CheckoutFormValues } from '@/entities/checkout';
 import { CustomerForm } from '@/entities/checkout/ui/CustomerForm';
 
 afterEach(cleanup);
 
-function renderWithForm(customer: Customer = { name: '', email: '', phone: '' }) {
+const defaultFormValues: CheckoutFormValues = {
+  customer: { name: '', email: '', phone: '' },
+  delivery: {
+    method: 'pickup',
+    pickupPointId: 'point-center',
+    address: { city: '', street: '', house: '' },
+  },
+};
+
+function renderWithForm(
+  customer: CheckoutFormValues['customer'] = { name: '', email: '', phone: '' },
+) {
   function Wrapper() {
-    const { register, formState } = useForm<{ customer: Customer }>({
-      defaultValues: { customer },
+    const { register, formState } = useForm<CheckoutFormValues>({
+      defaultValues: { ...defaultFormValues, customer },
       mode: 'onBlur',
     });
     return <CustomerForm register={register} errors={formState.errors} />;

@@ -89,7 +89,9 @@ git diff --stat HEAD -- ':!package-lock.json'
 ## API-запросы
 
 Типы из OpenAPI — источник истины для фронта. Генерация: `npm run gen:api -w @checkout/web`.
-Endpoint-функции используют `ApiResponseData<Op, Status>` и `ApiRequestBody<Op>` из `api-types.ts`.
+Endpoint-функции используют `ApiResponseData<Op, Status>` из `api-types.ts` для типов ответа.
+Для типов запроса — типы из `@checkout/contracts` (шире, совместимы с формами и RHF).
+Причина: OpenAPI генерирует literal-типы (`pickupPointId: 'point-center' | 'point-north'`), а RHF и формы дают `string`. Контракты (TypeBox `Static`) выводят `string`, что работает без кастов.
 Файл совместимости `src/shared/api/compat-check.ts` проверяет, что типы контрактов совпадают с OpenAPI.
 Если `tsc` падает на `compat-check.ts` — контракты и OpenAPI разошлись (ошибка на бэкенде).
 
@@ -138,6 +140,12 @@ Prettier: `singleQuote: true`, `printWidth: 100`, `trailingComma: "all"`.
 
 Не использовать `cd`. Параметр `directory` в `run_shell_command` по умолчанию = корень проекта.
 Нужен другой каталог → передать через `directory`.
+
+Область действий — только файлы проекта (корень репозитория и его подкаталоги).
+Не читать, не искать и не изменять файлы за пределами проекта: системные каталоги (`/c/Program Files/`, `/usr/`, `C:\Windows\` и т.д.), домашние каталоги других пользователей, глобальные конфиги.
+Если нужен файл вне проекта — запросить у пользователя, не искать самостоятельно.
+
+Не использовать `2>nul` в shell-командах — на Windows это создаёт файл `nul` вместо перенаправления в NUL device.
 
 ## FSD (Feature-Sliced Design)
 

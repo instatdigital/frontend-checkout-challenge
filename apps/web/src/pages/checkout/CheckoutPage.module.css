@@ -15,3 +15,25 @@
   font-size: 16px;
   cursor: pointer;
 }
+
+.checkout__summary {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.checkout__line {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.checkout__total {
+  margin: 4px 0 0;
+  font-size: 18px;
+  font-weight: 600;
+}

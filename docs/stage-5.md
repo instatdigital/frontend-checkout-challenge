@@ -84,15 +84,54 @@
 - Email-regex: упрощён для `super-linear-regex`
 - Удалены: `.oxlintrc.json`, `scripts/check-fsd.mjs`, `validate-customer.ts`
 
-### Шаг 3. CheckoutPage + DeliveryForm + API (getCheckoutOptions + createQuote)
+### Шаг 3. CheckoutPage + DeliveryForm + API (getCheckoutOptions + createQuote) ✅
 
 - CheckoutPage: `useAuthQuery(checkoutKeys.options(), ...)` → загрузка опций
 - CheckoutPage: форма с customer + delivery, QueryGuard
 - `entities/checkout/ui/DeliveryForm.tsx` — выбор доставки (самовывоз/курьер)
 - При выборе доставки → `createQuote({ cartVersion, delivery })`
 - Отображение: подытог, доставка, итого
+- Тип формы: плоский `CheckoutFormDelivery` (обход union-ограничения FieldErrors)
+- `toDelivery()` — конвертация плоского типа → `Delivery` для API
+- `createQuote` принимает `Delivery` из контрактов (не `ApiRequestBody<Op>`)
 - Тест: рендер опций, переключение доставки, расчёт стоимости
 
-**≈ 300 строк**
+### Шаг 4. Field-компоненты + возврат Delivery в тип формы
 
-## Итого: 3 шага, ~480 строк нового кода
+Цель: DRY (убрать повтор input+clsx+error) + типобезопасность (Controller → FieldErrors не нужен).
+
+#### 4.1. TextField + интеграция в CustomerForm
+
+- `shared/ui/TextField/TextField.tsx` + `.module.css`
+- `Controller` внутри: `field` + `fieldState.error`
+- Пропы: `control`, `name`, `rules`, `label`, `className`, `type?`
+- CustomerForm переписать на TextField (вместо register + ручной error-вывод)
+- CheckoutPage: передать `control` вместо `register` + `errors`
+- Тесты CustomerForm обновить
+
+**≈ 200 строк**
+
+#### 4.2. RadioGroupField + интеграция в DeliveryForm
+
+- `shared/ui/RadioGroupField/RadioGroupField.tsx` + `.module.css`
+- `Controller` внутри: radio-группа с options-массивом
+- Пропы: `control`, `name`, `rules`, `options: { value, label }[]`, `className`
+- DeliveryForm переписать на RadioGroupField + TextField
+- Убрать `useState` для selectedMethod (Controller управляет состоянием)
+- Убрать individual error props (`methodError`, `pickupPointError`, `addressErrors`)
+- CheckoutPage: передать `control` вместо `register`
+- Тесты DeliveryForm обновить
+
+**≈ 200 строк**
+
+#### 4.3. Упрощение: возврат Delivery + удаление toDelivery
+
+- `CheckoutFormValues.delivery`: `Delivery` вместо `CheckoutFormDelivery`
+- Удалить `CheckoutFormDelivery`, `toDelivery()` из `model/types.ts`
+- Удалить `useState` + `watch('delivery')` в CheckoutPage (условная отрисовка через Controller)
+- CheckoutPage: `data.delivery` напрямую в `createQuote`
+- Обновить тесты
+
+**≈ 50 строк**
+
+## Итого: 4 шага (3 подшага в шаге 4), ~750 строк нового кода

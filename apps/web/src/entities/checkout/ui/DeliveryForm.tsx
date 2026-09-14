@@ -1,12 +1,13 @@
 import clsx from 'clsx';
 import { useState } from 'react';
 import type { UseFormRegister, FieldError } from 'react-hook-form';
-import type { CheckoutOptions, Delivery } from '@checkout/contracts';
+import type { CheckoutOptions } from '@checkout/contracts';
+import type { CheckoutFormValues } from '../model/types';
 import './DeliveryForm.module.css';
 
 type DeliveryFormProps = {
   deliveryMethods: CheckoutOptions['deliveryMethods'];
-  register: UseFormRegister<{ delivery: Delivery }>;
+  register: UseFormRegister<CheckoutFormValues>;
   methodError?: FieldError;
   pickupPointError?: FieldError;
   addressErrors?: {

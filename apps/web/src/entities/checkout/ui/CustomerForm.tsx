@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import type { UseFormRegister, FieldErrors } from 'react-hook-form';
-import type { Customer } from '@checkout/contracts';
+import type { CheckoutFormValues } from '../model/types';
 import './CustomerForm.module.css';
 
 type CustomerFormProps = {
-  register: UseFormRegister<{ customer: Customer }>;
-  errors: FieldErrors<{ customer: Customer }>;
+  register: UseFormRegister<CheckoutFormValues>;
+  errors: FieldErrors<CheckoutFormValues>;
 };
 
 const inputClass = 'customer-form__input';
