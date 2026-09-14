@@ -84,30 +84,15 @@
 - Email-regex: упрощён для `super-linear-regex`
 - Удалены: `.oxlintrc.json`, `scripts/check-fsd.mjs`, `validate-customer.ts`
 
-### Шаг 3. Выбор доставки (DeliveryForm) ✅
+### Шаг 3. CheckoutPage + DeliveryForm + API (getCheckoutOptions + createQuote)
 
-- Компонент `entities/checkout/ui/DeliveryForm.tsx`
-- Получает `deliveryMethods`, `register`, `methodError`, `pickupPointError`, `addressErrors` (отдельные пропсы для ошибок — RHF `FieldErrors` не работает с union-типом `Delivery`)
-- Переключатель: самовывоз / курьер (radio, `useState` для UI-переключения)
-- При самовывозе — выбор пункта из списка
-- При курьере — поля адреса (city, street, house, apartment?)
-- `clsx` объектный синтаксис для условных классов ошибок
-- Константы `inputClass` / `inputError` для DRY
-- Стили: CSS Modules + БЭМ
-- Тест: рендер методов, пикап-пойнтов, переключение на курьер, отображение ошибок
-
-**≈ 150 строк**
-
-### Шаг 4. Интеграция: CheckoutPage + getCheckoutOptions + createQuote
-
-- `pages/checkout/CheckoutPage.tsx`
-- `useAuthQuery(checkoutKeys.options(), ...)` → загрузка опций
-- Состояние формы: customer + delivery + quote
+- CheckoutPage: `useAuthQuery(checkoutKeys.options(), ...)` → загрузка опций
+- CheckoutPage: форма с customer + delivery, QueryGuard
+- `entities/checkout/ui/DeliveryForm.tsx` — выбор доставки (самовывоз/курьер)
 - При выборе доставки → `createQuote({ cartVersion, delivery })`
 - Отображение: подытог, доставка, итого
-- QueryGuard для загрузки/ошибки
-- Тест: рендер опций, расчёт стоимости, ошибка
+- Тест: рендер опций, переключение доставки, расчёт стоимости
 
-**≈ 200 строк**
+**≈ 300 строк**
 
-## Итого: 4 шага, ~530 строк нового кода
+## Итого: 3 шага, ~480 строк нового кода
