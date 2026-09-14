@@ -1,0 +1,9 @@
+pre-commit:
+  commands:
+    check:
+      glob: '*'
+      run: >
+        npm run format
+        && npm run build -w @checkout/web
+        && npm run lint -w @checkout/web
+        && npm run test -w @checkout/web
