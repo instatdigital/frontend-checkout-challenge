@@ -76,13 +76,11 @@ export default tseslint.config(
       // Sonarjs: DRY rules
       'sonarjs/no-identical-functions': 'warn',
       'sonarjs/no-duplicate-string': 'warn',
-      // Sonarjs: disable noisy or redundant rules
-      'sonarjs/prefer-read-only-props': 'off',
-      'sonarjs/function-return-type': 'off',
       'sonarjs/cognitive-complexity': 'error',
-      'sonarjs/no-nested-switch': 'off',
-      'sonarjs/no-nested-conditional': 'off',
-      'sonarjs/prefer-immediate-return': 'off',
+      // React props already readonly by TS contract — adding readonly is redundant
+      'sonarjs/prefer-read-only-props': 'off',
+      // TanStack Query refetchInterval legitimately returns number | false
+      'sonarjs/function-return-type': 'off',
     },
   },
   {
