@@ -1,0 +1,25 @@
+.radio-group-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.radio-group-field__option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.radio-group-field__label {
+  font-weight: 500;
+}
+
+.radio-group-field__description {
+  color: #666;
+}
+
+.radio-group-field__error {
+  color: #d32f2f;
+  font-size: 12px;
+}

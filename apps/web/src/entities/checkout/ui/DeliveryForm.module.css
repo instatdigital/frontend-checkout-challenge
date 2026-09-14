@@ -10,62 +10,16 @@
 }
 
 .delivery-form__methods {
-  display: flex;
+  flex-direction: row;
   gap: 16px;
 }
 
-.delivery-form__method {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-}
-
 .delivery-form__pickup-points {
-  display: flex;
-  flex-direction: column;
   gap: 8px;
-}
-
-.delivery-form__pickup-point {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.delivery-form__pickup-title {
-  font-weight: 500;
-}
-
-.delivery-form__pickup-address {
-  color: #666;
 }
 
 .delivery-form__address {
   display: flex;
   flex-direction: column;
   gap: 12px;
-}
-
-.delivery-form__label {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.delivery-form__input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.delivery-form__input--error {
-  border-color: #d32f2f;
-}
-
-.delivery-form__error {
-  color: #d32f2f;
-  font-size: 12px;
 }

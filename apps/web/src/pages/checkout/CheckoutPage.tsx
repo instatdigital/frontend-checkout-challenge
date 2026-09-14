@@ -28,13 +28,7 @@ export function CheckoutPage() {
   const cart = options?.cart;
   const deliveryMethods = options?.deliveryMethods ?? [];
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<CheckoutFormValues>({
+  const { control, handleSubmit } = useForm<CheckoutFormValues>({
     defaultValues: {
       customer: { name: '', email: '', phone: '' },
       delivery: {
@@ -46,7 +40,6 @@ export function CheckoutPage() {
     mode: 'onBlur',
   });
 
-  const delivery = watch('delivery');
   const quote = quoteMutation.data;
 
   const onSubmit = (data: CheckoutFormValues) => {
@@ -56,24 +49,13 @@ export function CheckoutPage() {
     quoteMutation.mutate({ cartVersion: cart.version, delivery: deliveryValue });
   };
 
-  const deliveryError = errors.delivery;
-  const methodError = deliveryError?.method;
-  const pickupPointError = delivery.method === 'pickup' ? deliveryError?.pickupPointId : undefined;
-  const addressErrors = delivery.method === 'courier' ? deliveryError?.address : undefined;
-
   return (
     <div className="checkout">
       <h1 className="checkout__title">Оформление заказа</h1>
       <QueryGuard isLoading={isLoading} error={error}>
         <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate>
           <CustomerForm control={control} />
-          <DeliveryForm
-            deliveryMethods={deliveryMethods}
-            register={register}
-            methodError={methodError}
-            pickupPointError={pickupPointError}
-            addressErrors={addressErrors}
-          />
+          <DeliveryForm deliveryMethods={deliveryMethods} control={control} />
           {quote && (
             <div className="checkout__summary">
               <p className="checkout__line">Подытог: {formatPrice(quote.subtotal)}</p>

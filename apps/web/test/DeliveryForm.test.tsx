@@ -2,7 +2,6 @@ import { describe, it, expect, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { useForm } from 'react-hook-form';
-import type { FieldError } from 'react-hook-form';
 import type { CheckoutOptions } from '@checkout/contracts';
 import { DeliveryForm } from '@/entities/checkout';
 import type { CheckoutFormValues } from '@/entities/checkout';
@@ -37,32 +36,11 @@ const pickupDefaults: CheckoutFormValues = {
     address: { city: '', street: '', house: '' },
   },
 };
-const courierDefaults: CheckoutFormValues = {
-  customer: { name: '', email: '', phone: '' },
-  delivery: { method: 'courier', pickupPointId: '', address: { city: '', street: '', house: '' } },
-};
 
-function TestWrapper({
-  defaults,
-  addressErrors,
-}: {
-  defaults: CheckoutFormValues;
-  addressErrors?: {
-    city?: FieldError;
-    street?: FieldError;
-    house?: FieldError;
-    apartment?: FieldError;
-  };
-}) {
-  const { register } = useForm<CheckoutFormValues>({ defaultValues: defaults, mode: 'onBlur' });
+function TestWrapper({ defaults }: { defaults: CheckoutFormValues }) {
+  const { control } = useForm<CheckoutFormValues>({ defaultValues: defaults, mode: 'onBlur' });
 
-  return (
-    <DeliveryForm
-      deliveryMethods={deliveryMethods}
-      register={register}
-      addressErrors={addressErrors}
-    />
-  );
+  return <DeliveryForm deliveryMethods={deliveryMethods} control={control} />;
 }
 
 describe('DeliveryForm', () => {
@@ -89,14 +67,13 @@ describe('DeliveryForm', () => {
     });
   });
 
-  it('shows address error messages', async () => {
-    render(
-      <TestWrapper
-        defaults={courierDefaults}
-        addressErrors={{ city: { type: 'required', message: 'Город обязателен' } }}
-      />,
-    );
+  it('shows address error on blur', async () => {
+    render(<TestWrapper defaults={pickupDefaults} />);
     fireEvent.click(screen.getByLabelText('Курьер'));
+    await waitFor(() => {
+      expect(screen.getByLabelText('Город')).toBeInTheDocument();
+    });
+    fireEvent.blur(screen.getByLabelText('Город'));
     await waitFor(() => {
       expect(screen.getByText('Город обязателен')).toBeInTheDocument();
     });

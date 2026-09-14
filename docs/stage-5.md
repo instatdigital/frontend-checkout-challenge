@@ -111,7 +111,7 @@
 
 **≈ 200 строк**
 
-#### 4.2. RadioGroupField + интеграция в DeliveryForm
+#### 4.2. RadioGroupField + интеграция в DeliveryForm ✅
 
 - `shared/ui/RadioGroupField/RadioGroupField.tsx` + `.module.css`
 - `Controller` внутри: radio-группа с options-массивом
