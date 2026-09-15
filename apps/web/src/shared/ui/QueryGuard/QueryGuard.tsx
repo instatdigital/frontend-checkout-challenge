@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import './QueryGuard.module.css';
+import clsx from 'clsx';
+import styles from './QueryGuard.module.css';
 
 type QueryGuardProps = {
   isLoading: boolean;
@@ -8,7 +9,7 @@ type QueryGuardProps = {
 };
 
 export function QueryGuard({ isLoading, error, children }: QueryGuardProps) {
-  if (isLoading) return <p className="query-guard query-guard--loading">Загрузка…</p>;
-  if (error) return <p className="query-guard query-guard--error">Ошибка: {error.message}</p>;
+  if (isLoading) return <p className={clsx(styles.root, styles.root_loading)}>Загрузка…</p>;
+  if (error) return <p className={clsx(styles.root, styles.root_error)}>Ошибка: {error.message}</p>;
   return <>{children}</>;
 }

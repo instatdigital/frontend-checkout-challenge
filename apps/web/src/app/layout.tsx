@@ -1,13 +1,13 @@
 import { Outlet } from 'react-router';
-import './Layout.module.css';
+import styles from './layout.module.css';
 
 export function Layout() {
   return (
-    <div className="layout">
-      <header className="layout__header">
-        <span className="layout__logo">Магазин</span>
+    <div className={styles.root}>
+      <header className={styles.header}>
+        <span className={styles.logo}>Магазин</span>
       </header>
-      <main className="layout__main">
+      <main className={styles.main}>
         <Outlet />
       </main>
     </div>

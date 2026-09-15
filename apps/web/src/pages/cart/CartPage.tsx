@@ -5,7 +5,7 @@ import { getCart, setCartItem, removeCartItem, cartKeys, CartItem } from '@/enti
 import type { ApiRequestBody } from '@/shared/api/api-types';
 import { QueryGuard } from '@/shared/ui/QueryGuard/QueryGuard';
 import { formatPrice } from '@/shared/lib/format';
-import './CartPage.module.css';
+import styles from './CartPage.module.css';
 
 export function CartPage() {
   const queryClient = useQueryClient();
@@ -36,12 +36,12 @@ export function CartPage() {
   };
 
   return (
-    <div className="cart">
-      <h1 className="cart__title">Корзина</h1>
+    <div className={styles.root}>
+      <h1 className={styles.title}>Корзина</h1>
       <QueryGuard isLoading={isLoading} error={error}>
         {cart?.items.length ? (
           <>
-            <div className="cart__items">
+            <div className={styles.items}>
               {cart.items.map((item) => (
                 <CartItem
                   key={item.productId}
@@ -51,17 +51,17 @@ export function CartPage() {
                 />
               ))}
             </div>
-            <div className="cart__footer">
-              <p className="cart__subtotal">Итого: {formatPrice(cart.subtotal)}</p>
-              <Link to="/checkout" className="cart__checkout">
+            <div className={styles.footer}>
+              <p className={styles.subtotal}>Итого: {formatPrice(cart.subtotal)}</p>
+              <Link to="/checkout" className={styles.checkout}>
                 Оформить заказ
               </Link>
             </div>
           </>
         ) : (
           <>
-            <p className="cart__empty">Корзина пуста</p>
-            <Link to="/" className="cart__link">
+            <p className={styles.empty}>Корзина пуста</p>
+            <Link to="/" className={styles.link}>
               Перейти в каталог
             </Link>
           </>

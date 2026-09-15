@@ -1,46 +1,47 @@
-.card {
-  padding: 16px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+.root {
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
-.card__title {
+.title {
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
 }
 
-.card__description {
+.description {
   margin: 0;
-  color: #666;
-  font-size: 14px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
 }
 
-.card__price {
+.price {
   margin: 0;
-  font-size: 20px;
-  font-weight: 700;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
 }
 
-.card__button {
-  padding: 8px 16px;
+.button {
+  padding: var(--space-2) var(--space-4);
   border: none;
-  border-radius: 4px;
-  background: #1a1a1a;
-  color: #fff;
+  border-radius: var(--radius-sm);
+  background: var(--color-neutral-800);
+  color: var(--color-surface);
   cursor: pointer;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   align-self: flex-start;
+  transition: background var(--duration-fast) var(--easing);
 }
 
-.card__button:hover:not(:disabled) {
-  background: #333;
+.button:hover:not(:disabled) {
+  background: var(--color-neutral-700);
 }
 
-.card__button--disabled {
+.button_disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

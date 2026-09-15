@@ -1,12 +1,12 @@
-.query-guard {
+.root {
   margin: 0;
-  padding: 16px 0;
+  padding: var(--space-4) 0;
 }
 
-.query-guard--loading {
-  color: #666;
+.root_loading {
+  color: var(--color-text-secondary);
 }
 
-.query-guard--error {
-  color: #d32f2f;
+.root_error {
+  color: var(--color-error-text);
 }

@@ -6,7 +6,7 @@ import { setCartItem, cartKeys } from '@/entities/cart';
 import type { ApiRequestBody } from '@/shared/api/api-types';
 import { ProductCard } from '@/entities/product';
 import { QueryGuard } from '@/shared/ui/QueryGuard/QueryGuard';
-import './CatalogPage.module.css';
+import styles from './CatalogPage.module.css';
 
 export function CatalogPage() {
   const queryClient = useQueryClient();
@@ -26,11 +26,11 @@ export function CatalogPage() {
   };
 
   return (
-    <div className="catalog">
-      <h1 className="catalog__title">Каталог</h1>
+    <div className={styles.root}>
+      <h1 className={styles.title}>Каталог</h1>
       <QueryGuard isLoading={isLoading} error={error}>
         {products?.length ? (
-          <div className="catalog__grid">
+          <div className={styles.grid}>
             {products.map((product) => (
               <ProductCard key={product.id} product={product} onAddToCart={handleAddToCart} />
             ))}

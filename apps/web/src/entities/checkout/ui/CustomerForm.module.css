@@ -1,10 +1,10 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .title {
-  font-size: 20px;
+  font-size: var(--font-size-lg);
   margin: 0;
 }

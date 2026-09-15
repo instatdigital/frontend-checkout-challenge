@@ -39,27 +39,26 @@
 
 **≈ 80 строк**
 
-### Шаг 4. Обновление TextField на токены
+### Шаг 4. Обновление TextField на токены ✅
 
 - `shared/ui/TextField/TextField.module.css`: цвета, отступы, границы через var()
 - Focused, error, disabled состояния через токены
 
 **≈ 30 строк**
 
-### Шаг 5. Обновление RadioGroupField на токены
+### Шаг 5. Обновление RadioGroupField на токены ✅
 
-- `shared/ui/RadioGroupField/RadioGroupField.module.css`: через var()
-- Состояния: checked, focused, disabled
+- Выполнено в рамках шага 3 (Radix + токены одновременно)
 
-**≈ 30 строк**
-
-### Шаг 6. Обновление entity-стилей на токены
+### Шаг 6. Обновление entity-стилей на токены ✅
 
 - CustomerForm.module.css: layout + spacing через var()
 - DeliveryForm.module.css: layout + spacing через var()
 - CheckoutPage.module.css: layout + spacing через var()
 - CartPage.module.css, CatalogPage.module.css, ProductCard.module.css, CartItem.module.css
 - QueryGuard.module.css
+- Layout.module.css
+- Все компоненты переведены на `import styles from` + новая конвенция нейминга (.root/.name/.name_modifier)
 
 **≈ 100 строк**
 
