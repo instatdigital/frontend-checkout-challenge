@@ -1,0 +1,76 @@
+# Этап 6. Дизайн-система + Radix UI
+
+## Цель
+
+Выделить дизайн-токены (палитра, сетка, типографика), интегрировать Radix UI для доступности,
+обновить существующие компоненты на токены. Фундамент для всех следующих этапов.
+
+---
+
+### Шаг 1. Дизайн-токены (CSS-переменные)
+
+- Палитра: primary, secondary, error, success, neutral (50–900)
+- Типографика: font-family, font-size scale, font-weight, line-height
+- Отступы: spacing scale (4, 8, 12, 16, 24, 32, 48)
+- Границы: border-radius (sm, md, lg), border-width
+- Тени: shadow-sm, shadow-md
+- Переходы: duration, easing
+- Сетка: container max-width, breakpoints (390px, 1280px)
+
+Файл: `app/styles/tokens.css` → импорт в `index.css`
+
+**≈ 80 строк**
+
+### Шаг 2. Обновление базовых стилей
+
+- `app/styles/index.css`: использовать токены вместо хардкода
+- reset + body + глобальная типографика через var()
+- Убрать хардкод цветов/размеров из index.css
+
+**≈ 30 строк**
+
+### Шаг 3. Radix UI — RadioGroup
+
+- Установить `@radix-ui/react-radio-group`
+- Обновить `shared/ui/RadioGroupField`: Radix RadioGroup внутри вместо нативных radio
+- Стилизация через CSS Modules + BEM (Radix рендерит data-attributes)
+- Доступность: ARIA, keyboard navigation из коробки
+- API не меняется: control, name, rules, options, className
+
+**≈ 80 строк**
+
+### Шаг 4. Обновление TextField на токены
+
+- `shared/ui/TextField/TextField.module.css`: цвета, отступы, границы через var()
+- Focused, error, disabled состояния через токены
+
+**≈ 30 строк**
+
+### Шаг 5. Обновление RadioGroupField на токены
+
+- `shared/ui/RadioGroupField/RadioGroupField.module.css`: через var()
+- Состояния: checked, focused, disabled
+
+**≈ 30 строк**
+
+### Шаг 6. Обновление entity-стилей на токены
+
+- CustomerForm.module.css: layout + spacing через var()
+- DeliveryForm.module.css: layout + spacing через var()
+- CheckoutPage.module.css: layout + spacing через var()
+- CartPage.module.css, CatalogPage.module.css, ProductCard.module.css, CartItem.module.css
+- QueryGuard.module.css
+
+**≈ 100 строк**
+
+### Шаг 7. Адаптив (390px / 1280px)
+
+- Медиа-запросы через CSS-переменные или @media
+- Mobile-first: форма на всю ширину, кнопки full-width
+- Desktop: контейнер 800px, форма в две колонки (контакты + доставка)
+
+**≈ 60 строк**
+
+---
+
+## Итого: 7 шагов, ~410 строк
