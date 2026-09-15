@@ -4,7 +4,7 @@ import type { CheckoutOptions } from '@checkout/contracts';
 import type { CheckoutFormValues } from '../model/types';
 import { TextField } from '@/shared/ui/TextField/TextField';
 import { RadioGroupField } from '@/shared/ui/RadioGroupField/RadioGroupField';
-import './DeliveryForm.module.css';
+import styles from './DeliveryForm.module.css';
 
 type DeliveryFormProps = {
   deliveryMethods: CheckoutOptions['deliveryMethods'];
@@ -17,14 +17,14 @@ export function DeliveryForm({ deliveryMethods, control }: DeliveryFormProps) {
   const pickup = deliveryMethods.find((m) => m.id === 'pickup');
 
   return (
-    <div className="delivery-form">
-      <h2 className="delivery-form__title">Доставка</h2>
+    <div className={styles.root}>
+      <h2 className={styles.title}>Доставка</h2>
       <RadioGroupField
         control={control}
         name="delivery.method"
         rules={{ required: 'Выберите способ доставки' }}
         options={deliveryMethods.map((m) => ({ value: m.id, label: m.title }))}
-        className="delivery-form__methods"
+        className={styles.methods}
       />
       {deliveryMethod === 'pickup' && pickup && pickup.pickupPoints.length > 0 && (
         <RadioGroupField
@@ -36,11 +36,11 @@ export function DeliveryForm({ deliveryMethods, control }: DeliveryFormProps) {
             label: p.title,
             description: p.address,
           }))}
-          className="delivery-form__pickup-points"
+          className={styles.pickupPoints}
         />
       )}
       {deliveryMethod === 'courier' && (
-        <div className="delivery-form__address">
+        <div className={styles.address}>
           <TextField
             control={control}
             name="delivery.address.city"

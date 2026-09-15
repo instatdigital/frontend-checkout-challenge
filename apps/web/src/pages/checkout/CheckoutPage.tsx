@@ -11,7 +11,7 @@ import {
 import type { CheckoutFormValues } from '@/entities/checkout';
 import { QueryGuard } from '@/shared/ui/QueryGuard/QueryGuard';
 import { formatPrice } from '@/shared/lib/format';
-import './CheckoutPage.module.css';
+import styles from './CheckoutPage.module.css';
 
 export function CheckoutPage() {
   const {
@@ -46,20 +46,20 @@ export function CheckoutPage() {
   };
 
   return (
-    <div className="checkout">
-      <h1 className="checkout__title">Оформление заказа</h1>
+    <div className={styles.root}>
+      <h1 className={styles.title}>Оформление заказа</h1>
       <QueryGuard isLoading={isLoading} error={error}>
         <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate>
           <CustomerForm control={control} />
           <DeliveryForm deliveryMethods={deliveryMethods} control={control} />
           {quote && (
-            <div className="checkout__summary">
-              <p className="checkout__line">Подытог: {formatPrice(quote.subtotal)}</p>
-              <p className="checkout__line">Доставка: {formatPrice(quote.shipping)}</p>
-              <p className="checkout__total">Итого: {formatPrice(quote.total)}</p>
+            <div className={styles.summary}>
+              <p className={styles.line}>Подытог: {formatPrice(quote.subtotal)}</p>
+              <p className={styles.line}>Доставка: {formatPrice(quote.shipping)}</p>
+              <p className={styles.total}>Итого: {formatPrice(quote.total)}</p>
             </div>
           )}
-          <button className="checkout__submit" type="submit">
+          <button className={styles.submit} type="submit">
             Рассчитать стоимость
           </button>
         </form>

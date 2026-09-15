@@ -1,7 +1,7 @@
 import { Controller } from 'react-hook-form';
 import type { Control, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 import clsx from 'clsx';
-import './TextField.module.css';
+import styles from './TextField.module.css';
 
 type TextFieldProps<T extends FieldValues, N extends FieldPath<T>> = {
   control: Control<T>;
@@ -26,14 +26,14 @@ export function TextField<T extends FieldValues, N extends FieldPath<T>>({
       name={name}
       rules={rules}
       render={({ field, fieldState: { error } }) => (
-        <label className={clsx('text-field', className)}>
+        <label className={clsx(styles.root, className)}>
           {label}
           <input
             {...field}
-            className={clsx('text-field__input', { 'text-field__input--error': !!error })}
+            className={clsx(styles.input, { [styles.input_error]: !!error })}
             type={type}
           />
-          {error && <span className="text-field__error">{error.message}</span>}
+          {error && <span className={styles.error}>{error.message}</span>}
         </label>
       )}
     />

@@ -1,7 +1,8 @@
 import { Controller } from 'react-hook-form';
 import type { Control, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
+import * as RadioGroup from '@radix-ui/react-radio-group';
 import clsx from 'clsx';
-import './RadioGroupField.module.css';
+import styles from './RadioGroupField.module.css';
 
 export type RadioOption = {
   value: string;
@@ -30,24 +31,25 @@ export function RadioGroupField<T extends FieldValues, N extends FieldPath<T>>({
       name={name}
       rules={rules}
       render={({ field, fieldState: { error } }) => (
-        <div className={clsx('radio-group-field', className)}>
+        <RadioGroup.Root
+          value={field.value}
+          onValueChange={field.onChange}
+          onBlur={field.onBlur}
+          className={clsx(styles.root, className)}
+        >
           {options.map((option) => (
-            <label key={option.value} className="radio-group-field__option">
-              <input
-                type="radio"
-                value={option.value}
-                checked={field.value === option.value}
-                onChange={() => field.onChange(option.value)}
-                onBlur={field.onBlur}
-              />
-              <span className="radio-group-field__label">{option.label}</span>
+            <label key={option.value} className={styles.option}>
+              <RadioGroup.Item value={option.value} className={styles.radio}>
+                <RadioGroup.Indicator className={styles.indicator} />
+              </RadioGroup.Item>
+              <span className={styles.label}>{option.label}</span>
               {option.description && (
-                <span className="radio-group-field__description">{option.description}</span>
+                <span className={styles.description}>{option.description}</span>
               )}
             </label>
           ))}
-          {error && <span className="radio-group-field__error">{error.message}</span>}
-        </div>
+          {error && <span className={styles.error}>{error.message}</span>}
+        </RadioGroup.Root>
       )}
     />
   );

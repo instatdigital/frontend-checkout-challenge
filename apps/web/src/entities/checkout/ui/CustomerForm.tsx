@@ -1,7 +1,7 @@
 import type { Control } from 'react-hook-form';
 import type { CheckoutFormValues } from '../model/types';
 import { TextField } from '@/shared/ui/TextField/TextField';
-import './CustomerForm.module.css';
+import styles from './CustomerForm.module.css';
 
 type CustomerFormProps = {
   control: Control<CheckoutFormValues>;
@@ -9,8 +9,8 @@ type CustomerFormProps = {
 
 export function CustomerForm({ control }: CustomerFormProps) {
   return (
-    <div className="customer-form">
-      <h2 className="customer-form__title">Контакты</h2>
+    <div className={styles.root}>
+      <h2 className={styles.title}>Контакты</h2>
       <TextField
         control={control}
         name="customer.name"

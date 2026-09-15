@@ -1,4 +1,4 @@
-.text-field {
+.root {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -6,7 +6,7 @@
   color: #555;
 }
 
-.text-field__input {
+.input {
   padding: 8px 12px;
   font-size: 16px;
   border: 1px solid #ccc;
@@ -14,15 +14,15 @@
   outline: none;
 }
 
-.text-field__input:focus {
+.input:focus {
   border-color: #4a90d9;
 }
 
-.text-field__input--error {
+.input_error {
   border-color: #d94a4a;
 }
 
-.text-field__error {
+.error {
   font-size: 12px;
   color: #d94a4a;
 }

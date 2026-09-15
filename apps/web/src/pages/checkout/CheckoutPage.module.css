@@ -1,22 +1,22 @@
-.checkout {
+.root {
   max-width: 800px;
   margin: 0 auto;
   padding: 24px 16px;
 }
 
-.checkout__title {
+.title {
   font-size: 24px;
   margin-bottom: 16px;
 }
 
-.checkout__submit {
+.submit {
   margin-top: 16px;
   padding: 10px 24px;
   font-size: 16px;
   cursor: pointer;
 }
 
-.checkout__summary {
+.summary {
   margin-top: 16px;
   padding: 12px;
   border: 1px solid #ddd;
@@ -26,13 +26,13 @@
   gap: 4px;
 }
 
-.checkout__line {
+.line {
   margin: 0;
   font-size: 14px;
   color: #666;
 }
 
-.checkout__total {
+.total {
   margin: 4px 0 0;
   font-size: 18px;
   font-weight: 600;

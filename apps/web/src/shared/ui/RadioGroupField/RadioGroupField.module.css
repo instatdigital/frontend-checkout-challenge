@@ -1,25 +1,58 @@
-.radio-group-field {
+.root {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
-.radio-group-field__option {
+.option {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   cursor: pointer;
 }
 
-.radio-group-field__label {
-  font-weight: 500;
+.radio {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: var(--border-width) solid var(--color-border);
+  background: var(--color-input-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color var(--duration-fast) var(--easing);
 }
 
-.radio-group-field__description {
-  color: #666;
+.radio:hover {
+  border-color: var(--color-primary-500);
 }
 
-.radio-group-field__error {
-  color: #d32f2f;
-  font-size: 12px;
+.radio[data-state='checked'] {
+  border-color: var(--color-primary-600);
+}
+
+.radio:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-primary-600);
+}
+
+.label {
+  font-weight: var(--font-weight-medium);
+}
+
+.description {
+  color: var(--color-text-secondary);
+}
+
+.error {
+  color: var(--color-error-text);
+  font-size: var(--font-size-xs);
 }

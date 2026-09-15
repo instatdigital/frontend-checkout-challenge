@@ -1,24 +1,24 @@
-.delivery-form {
+.root {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.delivery-form__title {
+.title {
   margin: 0;
   font-size: 18px;
 }
 
-.delivery-form__methods {
+.methods {
   flex-direction: row;
   gap: 16px;
 }
 
-.delivery-form__pickup-points {
+.pickupPoints {
   gap: 8px;
 }
 
-.delivery-form__address {
+.address {
   display: flex;
   flex-direction: column;
   gap: 12px;

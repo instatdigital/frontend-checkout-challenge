@@ -1,10 +1,10 @@
-.customer-form {
+.root {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.customer-form__title {
+.title {
   font-size: 20px;
   margin: 0;
 }

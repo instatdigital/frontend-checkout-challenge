@@ -29,7 +29,7 @@
 
 **≈ 30 строк**
 
-### Шаг 3. Radix UI — RadioGroup
+### Шаг 3. Radix UI — RadioGroup ✅
 
 - Установить `@radix-ui/react-radio-group`
 - Обновить `shared/ui/RadioGroupField`: Radix RadioGroup внутри вместо нативных radio

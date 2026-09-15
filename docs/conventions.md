@@ -80,11 +80,13 @@ git diff --stat HEAD -- ':!package-lock.json'
 
 ## Стили
 
-- CSS Modules + БЭМ: `block__element--modifier`
+- CSS Modules: блок = `.root`, элемент = `.name`, модификатор = `.name_modifier` (файл = пространство имён)
+- Импорт стилей: `import styles from './File.module.css'` (НЕ side-effect import)
+- Доступ к классам: dot-нотация `styles.root`, `styles.title`, `styles.input_error`
 - Компонент = папка внутри entity: `entities/product/ui/ProductCard.tsx` + `ProductCard.module.css`
 - Глобальный файл — только сброс и CSS-переменные (в `app/styles/index.css`)
 - Компонент и хук/тип/контекст — в разных файлах (fast refresh)
-- Условные классы — через `clsx` объектный синтаксис: `clsx('block__element', { 'block__element--modifier': condition })`
+- Условные классы — через `clsx` объектный синтаксис: `clsx(styles.input, { [styles.input_error]: condition })`
 
 ## API-запросы
 
