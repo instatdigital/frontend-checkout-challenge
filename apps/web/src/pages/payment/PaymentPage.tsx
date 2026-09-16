@@ -48,7 +48,8 @@ export function PaymentPage() {
   const quoteExpired =
     createOrderMutation.error instanceof ApiError &&
     createOrderMutation.error.status === 409 &&
-    createOrderMutation.error.code === 'QUOTE_EXPIRED';
+    (createOrderMutation.error.code === 'QUOTE_EXPIRED' ||
+      createOrderMutation.error.code === 'CART_VERSION_CONFLICT');
 
   const paymentError = useMemo(() => {
     if (
