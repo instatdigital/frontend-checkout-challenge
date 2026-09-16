@@ -131,19 +131,22 @@ export { useRemoveCartItem } from './lib/use-remove-cart-item';
 - Страницы используют `useAddToCart()`, `useUpdateCartItem()`, `useRemoveCartItem()`
 - Удалено дублирование `useAuthMutation` + `useQueryClient` + инвалидация
 
-### 6.5.2. useAuthPolling в entities/session
+### 6.5.2. useAuthPolling в entities/session ✅
 
 **Зачем:** `usePolling` в `shared/api/hooks/use-polling.ts` не принимает токен. Для этапа 7 нужен поллинг `GET /api/payments/:paymentId` — это защищённый эндпоинт.
 
-**Что делаем:**
+**Что сделано (отличается от плана):**
 
-1. Создать `entities/session/lib/use-auth-polling.ts`:
+1. `useAuthPolling` добавлен **в существующий `entities/session/lib/auth-hooks.ts`** (не отдельный файл — все auth-хуки в одном месте)
+2. Реализация через **композицию с `usePolling`**, а не дублирование: `useAuthPolling` берёт токен из `useSession()` и оборачивает fetcher, делегируя `refetchInterval`/остановку в `usePolling`. Логика поллинга не повторяется.
    - `useAuthPolling<T>(key, fetcher: (token, signal) => Promise<T>, shouldStop, interval?, options?)`
-   - Аналог `useAuthQuery`: берёт токен из `useSession()`, `enabled: !!token && (options?.enabled ?? true)`
-2. Экспортировать из `entities/session/index.ts`
-3. Не трогать `usePolling` — он используется для публичных запросов (если будет)
+   - `enabled: !!token && (options?.enabled ?? true)` — не поллит без токена
+3. Экспортирован из `entities/session/index.ts`
+4. `usePolling` не тронут — используется для публичных запросов
 
-**Результат:** для этапа 7 доступен `useAuthPolling` — поллинг защищённых эндпоинтов с автоподстановкой токена.
+**Тест:** `test/use-auth-polling.test.tsx` — 3 кейса (нет токена → не поллит; токен передаётся в fetcher; остановка по shouldStop).
+
+**Результат:** для этапа 7 доступен `useAuthPolling` — поллинг защищённых эндпоинтов с автоподстановкой токена, без дублирования логики поллинга.
 
 ### 6.5.3. Общие тестовые хелперы ✅
 

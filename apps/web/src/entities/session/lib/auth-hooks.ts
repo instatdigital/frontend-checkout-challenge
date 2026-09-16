@@ -5,6 +5,7 @@ import {
   type UseMutationOptions,
 } from '@tanstack/react-query';
 import { useSession } from '../model/session-context';
+import { usePolling } from '@/shared/api/hooks/use-polling';
 import type { ApiErrorType } from '@/shared/api/errors';
 
 export function useAuthQuery<T>(
@@ -36,4 +37,24 @@ export function useAuthMutation<TData, TVariables>(
     },
     ...options,
   });
+}
+
+export function useAuthPolling<T>(
+  key: readonly unknown[],
+  fetcher: (token: string, signal: AbortSignal) => Promise<T>,
+  shouldStop: (data: T) => boolean,
+  interval = 1000,
+  options?: { enabled?: boolean },
+) {
+  const { token } = useSession();
+  return usePolling<T>(
+    key,
+    (signal) => {
+      if (!token) throw new Error('No token');
+      return fetcher(token, signal);
+    },
+    shouldStop,
+    interval,
+    { enabled: !!token && (options?.enabled ?? true) },
+  );
 }
