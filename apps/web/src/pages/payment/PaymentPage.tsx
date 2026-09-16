@@ -6,6 +6,7 @@ import { getSandbox, sandboxKeys } from '@/entities/sandbox';
 import { useCreateOrder } from '@/features/create-order';
 import { useCreatePayment, useSimulatePayment, usePaymentStatus } from '@/features/pay-by-card';
 import { QueryGuard } from '@/shared/ui/QueryGuard/QueryGuard';
+import { ApiError } from '@/shared/api/errors';
 import { generateKey } from '@/shared/lib/idempotency';
 import { clearPaymentId, loadPaymentId, savePaymentId } from '@/shared/lib/payment-recovery';
 import styles from './PaymentPage.module.css';
@@ -39,6 +40,11 @@ export function PaymentPage() {
 
   const cards = sandbox?.cards ?? [];
   const selectedCard = cards.find((card) => card.id === selectedCardId);
+
+  const quoteExpired =
+    createOrderMutation.error instanceof ApiError &&
+    createOrderMutation.error.status === 409 &&
+    createOrderMutation.error.code === 'QUOTE_EXPIRED';
 
   const paymentError = useMemo(() => {
     if (
@@ -161,6 +167,21 @@ export function PaymentPage() {
                   <span className={styles.cardMask}>{card.maskedNumber}</span>
                 </label>
               ))}
+            </div>
+          )}
+
+          {quoteExpired && (
+            <div className={styles.error}>
+              <p>Расчёт устарел. Вернитесь к чекауту и пересчитайте стоимость.</p>
+              <button
+                type="button"
+                className={styles.submit}
+                onClick={() => {
+                  void navigate('/checkout');
+                }}
+              >
+                Вернуться к чекауту
+              </button>
             </div>
           )}
 
