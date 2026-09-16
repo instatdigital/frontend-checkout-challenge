@@ -155,11 +155,14 @@ Prettier: `singleQuote: true`, `printWidth: 100`, `trailingComma: "all"`.
 
 ## FSD (Feature-Sliced Design)
 
-Архитектура: `app → pages → entities → shared`. Зависимости только сверху вниз.
+Архитектура: `app → pages → features → entities → shared`. Зависимости только сверху вниз.
 Проверяется ESLint (`eslint-plugin-fsd-import`): `layer-imports`, `slice-boundaries`, `public-api-imports`.
 
 - **app/** — провайдеры, роуты, лейаут, глобальные стили
 - **pages/** — страницы (слайс на роут): `pages/catalog/`, `pages/cart/`
+- **features/** — пользовательские сценарии, комбинирующие entities: `add-to-cart`, `update-cart-item`
+  - Кросс-доменная оркестрация (cart + session, order + payment)
+  - Хуки, объединяющие несколько entities (useAuthMutation + cart API + queryClient)
 - **entities/** — доменные слайсы: `product/`, `cart/`, `session/`, `checkout/`, `order/`, `payment/`
   - Каждый слайс: `api.ts`, `ui/`, `lib/`, `model/` (по необходимости), `index.ts` (публичный API)
 - **shared/** — инфраструктура без бизнес-логики: `api/` (транспорт, хуки), `ui/` (QueryGuard), `lib/` (format, idempotency, query-client)
@@ -167,7 +170,7 @@ Prettier: `singleQuote: true`, `printWidth: 100`, `trailingComma: "all"`.
 Правила:
 
 - Импорт между слоями — только через `index.ts` (публичный API слайса)
-- Entities не импортируют друг друга. Кросс-доменное взаимодействие — через pages
+- Entities не импортируют друг друга. Кросс-доменное взаимодействие — через features
 - shared не зависит от entities (auth-hooks → entities/session, не shared)
 - Алиас `@/` → `src/`. Внутри слайса — относительные импорты (`../api`, `./errors`)
 

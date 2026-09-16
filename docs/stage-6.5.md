@@ -35,22 +35,101 @@ test:
 
 **Результат:** коммит `.md`/`.yml` → только format (~5с). Коммит TS → все 5 шагов. Проверено: `build/lint/test/typecheck` показывают `(skip) no matching staged files` для `.yml`-коммита.
 
-### 6.5.1. Хуки мутаций корзины в entities/cart
+### 6.5.1. Создание слоя features для операций с корзиной
 
-**Зачем:** CatalogPage и CartPage дублируют паттерн `useAuthMutation` для `setCartItem` — одинаковый тип переменных `{ productId, body }`, одинаковая инвалидация `cartKeys.detail()`.
+**Зачем:** CatalogPage и CartPage дублируют паттерн `useAuthMutation` для `setCartItem` — одинаковый тип переменных `{ productId, body }`, одинаковая инвалидация `cartKeys.detail()`. Это кросс-доменная оркестрация (cart + session), которая по FSD живёт в слое `features`, а не в `entities` (entities не импортируют друг друга).
 
 **Что делаем:**
 
-1. Создать `entities/cart/lib/use-cart-mutations.ts`:
-   - `useSetCartItem()` — `useAuthMutation` + `useQueryClient` + инвалидация `cartKeys.detail()`
-   - `useRemoveCartItem()` — аналогично для `removeCartItem`
-   - Тип переменных: `SetCartItemVars = { productId: string; body: ApiRequestBody<'setCartItem'> }` и `RemoveCartItemVars = { productId: string }`
-2. Экспортировать из `entities/cart/index.ts`
-3. Обновить `pages/catalog/CatalogPage.tsx` — заменить ручной `useAuthMutation` + `useQueryClient` на `useSetCartItem()`
-4. Обновить `pages/cart/CartPage.tsx` — заменить 2 `useAuthMutation` + `useQueryClient` + `invalidateCart` на `useSetCartItem()` + `useRemoveCartItem()`
-5. Удалить `getCartItem` из `entities/cart/api.ts` (мёртвый код, не экспортируется)
+1. Создать слой `src/features/` с тремя фичами:
 
-**Результат:** страницы используют `const addToCart = useSetCartItem()` / `const removeItem = useRemoveCartItem()` — без `useQueryClient`, без ручного типа переменных, без `ApiRequestBody` в страницах.
+**`features/add-to-cart/`**
+
+```typescript
+// lib/use-add-to-cart.ts
+import { useQueryClient } from '@tanstack/react-query';
+import { useAuthMutation } from '@/entities/session';
+import { setCartItem, cartKeys } from '@/entities/cart';
+import type { ApiRequestBody } from '@/shared/api/api-types';
+
+type AddToCartVars = { productId: string; body: ApiRequestBody<'setCartItem'> };
+
+export function useAddToCart() {
+  const queryClient = useQueryClient();
+  return useAuthMutation<ApiRequestBody<'setCartItem'>, AddToCartVars>(
+    (vars, token) => setCartItem(vars.productId, vars.body, token),
+    { onSuccess: () => queryClient.invalidateQueries({ queryKey: cartKeys.detail() }) },
+  );
+}
+
+// index.ts
+export { useAddToCart } from './lib/use-add-to-cart';
+```
+
+**`features/update-cart-item/`**
+
+```typescript
+// lib/use-update-cart-item.ts
+import { useQueryClient } from '@tanstack/react-query';
+import { useAuthMutation } from '@/entities/session';
+import { setCartItem, cartKeys } from '@/entities/cart';
+import type { ApiRequestBody } from '@/shared/api/api-types';
+
+type UpdateCartItemVars = { productId: string; body: ApiRequestBody<'setCartItem'> };
+
+export function useUpdateCartItem() {
+  const queryClient = useQueryClient();
+  return useAuthMutation<ApiRequestBody<'setCartItem'>, UpdateCartItemVars>(
+    (vars, token) => setCartItem(vars.productId, vars.body, token),
+    { onSuccess: () => queryClient.invalidateQueries({ queryKey: cartKeys.detail() }) },
+  );
+}
+
+// index.ts
+export { useUpdateCartItem } from './lib/use-update-cart-item';
+```
+
+**`features/remove-cart-item/`**
+
+```typescript
+// lib/use-remove-cart-item.ts
+import { useQueryClient } from '@tanstack/react-query';
+import { useAuthMutation } from '@/entities/session';
+import { removeCartItem, cartKeys } from '@/entities/cart';
+
+type RemoveCartItemVars = { productId: string };
+
+export function useRemoveCartItem() {
+  const queryClient = useQueryClient();
+  return useAuthMutation<void, RemoveCartItemVars>(
+    (vars, token) => removeCartItem(vars.productId, token),
+    { onSuccess: () => queryClient.invalidateQueries({ queryKey: cartKeys.detail() }) },
+  );
+}
+
+// index.ts
+export { useRemoveCartItem } from './lib/use-remove-cart-item';
+```
+
+2. Обновить `pages/catalog/CatalogPage.tsx`:
+   - Удалить `useQueryClient`, `useAuthMutation`, `ApiRequestBody`
+   - Импортировать `useAddToCart` из `@/features/add-to-cart`
+   - Заменить `addToCart.mutate({ productId, body: { quantity: 1 } })` на `addToCart.mutate({ productId, body: { quantity: 1 } })` (без изменений вызова)
+
+3. Обновить `pages/cart/CartPage.tsx`:
+   - Удалить `useQueryClient`, `useAuthMutation`, `invalidateCart`, `ApiRequestBody`
+   - Импортировать `useUpdateCartItem` из `@/features/update-cart-item`
+   - Импортировать `useRemoveCartItem` из `@/features/remove-cart-item`
+
+4. Удалить `getCartItem` из `entities/cart/api.ts` (мёртвый код, не экспортируется)
+
+**Результат:**
+
+- FSD-иерархия: `pages → features → entities` ✓
+- Entities не импортируют друг друга ✓
+- Кросс-доменная оркестрация (cart + session) в features ✓
+- Страницы используют `useAddToCart()`, `useUpdateCartItem()`, `useRemoveCartItem()`
+- Удалено дублирование `useAuthMutation` + `useQueryClient` + инвалидация
 
 ### 6.5.2. useAuthPolling в entities/session
 
