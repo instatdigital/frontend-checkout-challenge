@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import clsx from 'clsx';
+import { Spinner } from '@/shared/ui/Spinner/Spinner';
 import styles from './QueryGuard.module.css';
 
 type QueryGuardProps = {
@@ -10,7 +11,13 @@ type QueryGuardProps = {
 };
 
 export function QueryGuard({ isLoading, error, children, onRetry }: QueryGuardProps) {
-  if (isLoading) return <p className={clsx(styles.root, styles.root_loading)}>Загрузка…</p>;
+  if (isLoading) {
+    return (
+      <div className={clsx(styles.root, styles.root_loading)}>
+        <Spinner />
+      </div>
+    );
+  }
   if (error)
     return (
       <div className={clsx(styles.root, styles.root_error)}>
