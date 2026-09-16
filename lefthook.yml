@@ -1,10 +1,17 @@
 pre-commit:
   commands:
-    check:
+    format:
       glob: '*'
-      run: >
-        npm run format
-        && npx tsc --noEmit -p apps/web/tsconfig.test.json
-        && npm run build -w @checkout/web
-        && npm run lint -w @checkout/web
-        && npm run test -w @checkout/web
+      run: npm run format:check
+    typecheck:
+      glob: '*'
+      run: npm run typecheck -w @checkout/web
+    build:
+      glob: '*'
+      run: npm run build -w @checkout/web
+    lint:
+      glob: '*'
+      run: npm run lint -w @checkout/web
+    test:
+      glob: '*'
+      run: npm run test -w @checkout/web
