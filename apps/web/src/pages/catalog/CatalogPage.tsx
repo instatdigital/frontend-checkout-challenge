@@ -1,25 +1,17 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { useApiQuery } from '@/shared/api/hooks';
-import { useAuthMutation } from '@/entities/session';
+import { useAddToCart } from '@/features/add-to-cart';
 import { listProducts, productKeys } from '@/entities/product';
-import { setCartItem, cartKeys } from '@/entities/cart';
-import type { ApiRequestBody } from '@/shared/api/api-types';
 import { ProductCard } from '@/entities/product';
 import { QueryGuard } from '@/shared/ui/QueryGuard/QueryGuard';
 import styles from './CatalogPage.module.css';
 
 export function CatalogPage() {
-  const queryClient = useQueryClient();
   const {
     data: products,
     isLoading,
     error,
   } = useApiQuery(productKeys.list(), () => listProducts());
-  const addToCart = useAuthMutation(
-    ({ productId, body }: { productId: string; body: ApiRequestBody<'setCartItem'> }, token) =>
-      setCartItem(productId, body, token),
-    { onSuccess: () => queryClient.invalidateQueries({ queryKey: cartKeys.detail() }) },
-  );
+  const addToCart = useAddToCart();
 
   const handleAddToCart = (productId: string) => {
     addToCart.mutate({ productId, body: { quantity: 1 } });

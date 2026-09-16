@@ -1,31 +1,20 @@
 import { Link } from 'react-router';
-import { useQueryClient } from '@tanstack/react-query';
-import { useAuthQuery, useAuthMutation } from '@/entities/session';
-import { getCart, setCartItem, removeCartItem, cartKeys, CartItem } from '@/entities/cart';
-import type { ApiRequestBody } from '@/shared/api/api-types';
+import { useAuthQuery } from '@/entities/session';
+import { getCart, cartKeys, CartItem } from '@/entities/cart';
+import { useUpdateCartItem } from '@/features/update-cart-item';
+import { useRemoveCartItem } from '@/features/remove-cart-item';
 import { QueryGuard } from '@/shared/ui/QueryGuard/QueryGuard';
 import { formatPrice } from '@/shared/lib/format';
 import styles from './CartPage.module.css';
 
 export function CartPage() {
-  const queryClient = useQueryClient();
   const {
     data: cart,
     isLoading,
     error,
   } = useAuthQuery(cartKeys.detail(), (token, signal) => getCart(token, signal));
-  const invalidateCart = {
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: cartKeys.detail() }),
-  };
-  const updateItem = useAuthMutation(
-    ({ productId, body }: { productId: string; body: ApiRequestBody<'setCartItem'> }, token) =>
-      setCartItem(productId, body, token),
-    invalidateCart,
-  );
-  const deleteItem = useAuthMutation(
-    ({ productId }: { productId: string }, token) => removeCartItem(productId, token),
-    invalidateCart,
-  );
+  const updateItem = useUpdateCartItem();
+  const deleteItem = useRemoveCartItem();
 
   const handleQuantityChange = (productId: string, quantity: number) => {
     updateItem.mutate({ productId, body: { quantity } });
