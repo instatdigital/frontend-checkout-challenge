@@ -10,6 +10,7 @@ export function CatalogPage() {
     data: products,
     isLoading,
     error,
+    refetch,
   } = useApiQuery(productKeys.list(), () => listProducts());
   const addToCart = useAddToCart();
 
@@ -20,7 +21,13 @@ export function CatalogPage() {
   return (
     <div className={styles.root}>
       <h1 className={styles.title}>Каталог</h1>
-      <QueryGuard isLoading={isLoading} error={error}>
+      <QueryGuard
+        isLoading={isLoading}
+        error={error}
+        onRetry={() => {
+          void refetch();
+        }}
+      >
         {products?.length ? (
           <div className={styles.grid}>
             {products.map((product) => (

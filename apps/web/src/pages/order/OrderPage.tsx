@@ -26,12 +26,19 @@ export function OrderPage() {
     data: order,
     isLoading,
     error,
+    refetch,
   } = useAuthQuery(orderKeys.detail(id), (token) => getOrder(id, token), { enabled: !!id });
 
   return (
     <div className={styles.root}>
       <h1 className={styles.title}>Заказ {order?.number ?? ''}</h1>
-      <QueryGuard isLoading={isLoading} error={error}>
+      <QueryGuard
+        isLoading={isLoading}
+        error={error}
+        onRetry={() => {
+          void refetch();
+        }}
+      >
         {order && (
           <div className={styles.content}>
             <p className={styles.status}>{getStatusMessage(order)}</p>

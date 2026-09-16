@@ -21,6 +21,7 @@ export function CheckoutPage() {
     data: options,
     isLoading,
     error,
+    refetch,
   } = useAuthQuery(checkoutKeys.options(), (token, signal) => getCheckoutOptions(token, signal));
 
   const quoteMutation = useAuthMutation(
@@ -58,7 +59,13 @@ export function CheckoutPage() {
   return (
     <div className={styles.root}>
       <h1 className={styles.title}>Оформление заказа</h1>
-      <QueryGuard isLoading={isLoading} error={error}>
+      <QueryGuard
+        isLoading={isLoading}
+        error={error}
+        onRetry={() => {
+          void refetch();
+        }}
+      >
         <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate className={styles.form}>
           <CustomerForm control={control} />
           <DeliveryForm deliveryMethods={deliveryMethods} control={control} />

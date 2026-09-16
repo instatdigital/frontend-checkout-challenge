@@ -1,5 +1,5 @@
-import { describe, it, expect, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { QueryGuard } from '@/shared/ui/QueryGuard/QueryGuard';
 
@@ -31,5 +31,17 @@ describe('QueryGuard', () => {
       </QueryGuard>,
     );
     expect(screen.getByText('Content')).toBeInTheDocument();
+  });
+
+  it('calls onRetry when retry button is clicked', () => {
+    const onRetry = vi.fn();
+    render(
+      <QueryGuard isLoading={false} error={new Error('Network error')} onRetry={onRetry}>
+        <p>Content</p>
+      </QueryGuard>,
+    );
+    const button = screen.getByRole('button', { name: 'Повторить' });
+    fireEvent.click(button);
+    expect(onRetry).toHaveBeenCalledTimes(1);
   });
 });

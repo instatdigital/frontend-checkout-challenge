@@ -12,6 +12,7 @@ export function CartPage() {
     data: cart,
     isLoading,
     error,
+    refetch,
   } = useAuthQuery(cartKeys.detail(), (token, signal) => getCart(token, signal));
   const updateItem = useUpdateCartItem();
   const deleteItem = useRemoveCartItem();
@@ -27,7 +28,13 @@ export function CartPage() {
   return (
     <div className={styles.root}>
       <h1 className={styles.title}>Корзина</h1>
-      <QueryGuard isLoading={isLoading} error={error}>
+      <QueryGuard
+        isLoading={isLoading}
+        error={error}
+        onRetry={() => {
+          void refetch();
+        }}
+      >
         {cart?.items.length ? (
           <>
             <div className={styles.items}>

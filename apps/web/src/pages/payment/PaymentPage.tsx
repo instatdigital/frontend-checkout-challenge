@@ -32,7 +32,12 @@ export function PaymentPage() {
   const orderKey = useMemo(() => generateKey(), []);
   const paymentKey = useMemo(() => generateKey(), []);
 
-  const { data: sandbox, isLoading, error } = useAuthQuery(sandboxKeys.cards(), getSandbox);
+  const {
+    data: sandbox,
+    isLoading,
+    error,
+    refetch,
+  } = useAuthQuery(sandboxKeys.cards(), getSandbox);
   const createOrderMutation = useCreateOrder();
   const createPaymentMutation = useCreatePayment();
   const simulatePaymentMutation = useSimulatePayment();
@@ -126,7 +131,13 @@ export function PaymentPage() {
   return (
     <div className={styles.root}>
       <h1 className={styles.title}>Оплата</h1>
-      <QueryGuard isLoading={isLoading} error={error}>
+      <QueryGuard
+        isLoading={isLoading}
+        error={error}
+        onRetry={() => {
+          void refetch();
+        }}
+      >
         <div className={styles.form}>
           <div className={styles.methods}>
             <label className={styles.method}>
