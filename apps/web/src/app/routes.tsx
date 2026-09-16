@@ -4,6 +4,7 @@ import { CatalogPage } from '@/pages/catalog';
 import { CartPage } from '@/pages/cart';
 import { CheckoutPage } from '@/pages/checkout';
 import { PaymentPage } from '@/pages/payment';
+import { OrderPage } from '@/pages/order';
 
 export function AppRoutes() {
   return (
@@ -14,6 +15,7 @@ export function AppRoutes() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/checkout/payment" element={<PaymentPage />} />
+          <Route path="/orders/:orderId" element={<OrderPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

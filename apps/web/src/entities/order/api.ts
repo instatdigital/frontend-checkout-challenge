@@ -1,6 +1,10 @@
 import { apiRequest } from '@/shared/api/transport';
 import type { ApiResponseData, ApiRequestBody } from '@/shared/api/api-types';
 
+export const orderKeys = {
+  detail: (orderId: string) => ['order', orderId] as const,
+};
+
 export function createOrder(
   body: ApiRequestBody<'createOrder'>,
   token: string,
