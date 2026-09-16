@@ -138,6 +138,14 @@ Vitest. Покрытие ключевых модулей: транспортны
 Для однотипных проверок — `it.each([{input, output}, ...])`, не писать отдельный `it` на каждый кейс.
 Тесты react-hook-form: валидация асинхронна в jsdom — использовать `waitFor` после `fireEvent.blur`.
 
+Общие хелперы — в `test/helpers/`: `createTestWrapper` (QueryClient + опц. MemoryRouter), `defaultSession` (значения для mock сессии).
+
+### Грабли Vitest + TanStack Query
+
+1. **`vi.mock` не работает из импортированного хелпера.** Vitest хоистит `vi.mock` только внутри самого тест-файла. Если вынести `vi.mock(...)` в `test/helpers/mock-session.ts` и импортировать — мок НЕ применится, `useSession` будет `undefined`. Поэтому `vi.mock` остаётся в каждом тест-файле, а хелпер экспортирует только данные (`defaultSession`).
+
+2. **Тестовый wrapper должен создавать свежий `QueryClient` на каждый render.** Если создать `QueryClient` один раз в замыкании `createTestWrapper()` и переиспользовать — кеш TanStack Query протекает между тестами (данные первого теста видны во втором, `gcTime` по умолчанию 5 минут). Правильно: `new QueryClient(...)` ВНУТРИ возвращаемого компонента.
+
 ## Форматирование
 
 Prettier: `singleQuote: true`, `printWidth: 100`, `trailingComma: "all"`.

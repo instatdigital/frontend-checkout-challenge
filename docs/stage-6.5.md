@@ -145,27 +145,22 @@ export { useRemoveCartItem } from './lib/use-remove-cart-item';
 
 **Результат:** для этапа 7 доступен `useAuthPolling` — поллинг защищённых эндпоинтов с автоподстановкой токена.
 
-### 6.5.3. Общие тестовые хелперы
+### 6.5.3. Общие тестовые хелперы ✅
 
 **Зачем:** 4 тестовых файла дублируют `new QueryClient({ defaultOptions: { queries: { retry: false } } })` + `QueryClientProvider`. 2 файла дублируют mock сессии.
 
-**Что делаем:**
+**Что сделано (отличается от первоначального плана):**
 
-1. Создать `test/helpers/create-wrapper.tsx`:
-   - `createTestWrapper(options?: { withRouter?: boolean })` — возвращает `wrapper` для renderHook/render
-   - Создаёт `QueryClient` с `retry: false`, оборачивает в `QueryClientProvider`
-   - Если `withRouter` — добавляет `MemoryRouter`
-2. Создать `test/helpers/mock-session.ts`:
-   - `mockSession(overrides?)` — `vi.mock('@/entities/session/model/session-context', ...)`
-   - Default: `{ token: 'test-token', sessionId: 's-1', isLoading: false, error: null }`
-3. Обновить существующие тесты:
-   - `test/api-hooks.test.tsx` — использовать `createTestWrapper()`
-   - `test/auth-hooks.test.tsx` — использовать `createTestWrapper()`
-   - `test/CartPage.test.tsx` — использовать `createTestWrapper({ withRouter: true })` + `mockSession()`
-   - `test/CatalogPage.test.tsx` — использовать `createTestWrapper()` + `mockSession()`
-   - `test/session-context.test.tsx` — использовать `createTestWrapper()`
+1. `test/helpers/create-wrapper.tsx`:
+   - `createTestWrapper(options?: { withRouter?, queryClientOptions? })` — возвращает wrapper-компонент
+   - **QueryClient создаётся ВНУТРИ компонента** (свежий кеш на каждый render), а не в замыкании — иначе данные протекают между тестами
+   - Если `withRouter` — оборачивает в `MemoryRouter`
+2. `test/helpers/mock-session.ts`:
+   - Экспортирует только константу `defaultSession` (`{ token: 'test-token', sessionId: 's-1', isLoading: false, error: null }`)
+   - **`vi.mock` НЕ вынесен в хелпер** — Vitest хоистит моки только внутри самого тест-файла, из импортированного модуля `vi.mock` не срабатывает. Каждый тест-файл сам делает `vi.mock('@/entities/session/model/session-context', () => ({ useSession: () => defaultSession }))`
+3. Обновлены тесты: `api-hooks`, `auth-hooks`, `CartPage`, `CatalogPage` — используют `createTestWrapper()` и `defaultSession`. `session-context.test.tsx` не тронут (у него уникальная обёртка на `SessionProvider`).
 
-**Результат:** тестовые обёртки и моки в одном месте, при добавлении тестов этапа 7 — переиспользование.
+**Результат:** обёртка QueryClient в одном месте, значения сессии — в `defaultSession`. `vi.mock` остаётся в тест-файлах (ограничение Vitest). 76 тестов проходят.
 
 ### 6.5.4. (опционально) Документировать `as T` в transport.ts
 
