@@ -18,6 +18,12 @@
   gap: var(--space-4);
 }
 
+.empty {
+  padding: var(--space-6) 0;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
 @media (--desktop) {
   .grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

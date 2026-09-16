@@ -11,6 +11,12 @@
   margin-bottom: var(--space-4);
 }
 
+.empty {
+  padding: var(--space-6) 0;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
 .content {
   display: flex;
   flex-direction: column;

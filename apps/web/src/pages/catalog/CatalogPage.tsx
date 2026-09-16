@@ -35,7 +35,7 @@ export function CatalogPage() {
             ))}
           </div>
         ) : (
-          <p>Товары не найдены</p>
+          <p className={styles.empty}>Товары не найдены</p>
         )}
       </QueryGuard>
     </div>

@@ -29,6 +29,15 @@ export function OrderPage() {
     refetch,
   } = useAuthQuery(orderKeys.detail(id), (token) => getOrder(id, token), { enabled: !!id });
 
+  if (!id) {
+    return (
+      <div className={styles.root}>
+        <h1 className={styles.title}>Заказ</h1>
+        <p className={styles.empty}>Заказ не найден</p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.root}>
       <h1 className={styles.title}>Заказ {order?.number ?? ''}</h1>
