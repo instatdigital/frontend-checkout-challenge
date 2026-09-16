@@ -4,14 +4,14 @@ pre-commit:
       glob: '*'
       run: npm run format:check
     typecheck:
-      glob: '*'
+      glob: 'apps/web/**/*.{ts,tsx,json}'
       run: npm run typecheck -w @checkout/web
     build:
-      glob: '*'
+      glob: 'apps/web/**/*.{ts,tsx,css,html,json}'
       run: npm run build -w @checkout/web
     lint:
-      glob: '*'
+      glob: 'apps/web/**/*.{ts,tsx,js}'
       run: npm run lint -w @checkout/web
     test:
-      glob: '*'
+      glob: 'apps/web/**/*.{ts,tsx}'
       run: npm run test -w @checkout/web
