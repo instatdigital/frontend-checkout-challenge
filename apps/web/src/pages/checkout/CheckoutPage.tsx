@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import type { Delivery } from '@checkout/contracts';
 import { useAuthQuery, useAuthMutation } from '@/entities/session';
 import {
@@ -14,6 +15,8 @@ import { formatPrice } from '@/shared/lib/format';
 import styles from './CheckoutPage.module.css';
 
 export function CheckoutPage() {
+  const navigate = useNavigate();
+
   const {
     data: options,
     isLoading,
@@ -42,7 +45,14 @@ export function CheckoutPage() {
 
   const onSubmit = (data: CheckoutFormValues) => {
     if (!cart) return;
-    quoteMutation.mutate({ cartVersion: cart.version, delivery: data.delivery });
+    quoteMutation
+      .mutateAsync({ cartVersion: cart.version, delivery: data.delivery })
+      .then((quote) => {
+        return navigate('/checkout/payment', {
+          state: { quoteId: quote.id, customer: data.customer },
+        });
+      })
+      .catch(() => {});
   };
 
   return (
