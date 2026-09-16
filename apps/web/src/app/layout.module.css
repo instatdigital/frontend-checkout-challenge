@@ -7,6 +7,10 @@
 }
 
 .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
   padding: var(--space-3) var(--space-4);
   border-bottom: var(--border-width) solid var(--color-neutral-200);
 }
@@ -14,6 +18,28 @@
 .logo {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.logo:hover {
+  color: var(--color-primary-600);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.link {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+}
+
+.link:hover {
+  color: var(--color-primary-600);
 }
 
 .main {
