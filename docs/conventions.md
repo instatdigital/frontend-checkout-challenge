@@ -31,16 +31,8 @@
 
 ### 3. Проверка
 
-- После `write_file`/`edit` — проверки по релевантности:
-  - `.md`, `.yml`, `.json` (не tsconfig) → `format:check`
-  - `*.{ts,tsx}` → `typecheck` + `lint`
-  - Полный цикл (format + typecheck + build + lint + test) → только перед коммитом
-- Перед коммитом — полный цикл:
-  ```bash
-  npx lefthook run pre-commit --force
-  ```
-  Цепочка: format → typecheck → build → lint → test.
-- Если проверка падает — фиксить до перехода к следующему действию. Не пропускать, не откладывать.
+- После `write_file`/`edit` — запускать `npm run format`. Остальные проверки (`typecheck`, `lint`, `build`, `test`) прогоняет git-хук `pre-commit`; ручной запуск — только если хочется раньше поймать ошибку.
+- Если коммит упал на хуке — фиксить и коммитить заново.
 - **Lefthook glob**: команды должны иметь узкие `glob`, чтобы doc-коммиты не запускали typecheck/build/lint/test. Lefthook пропускает команду, если ни один staged-файл не попадает в glob.
 
 ### 4. Саморефлексия и анализ
@@ -230,8 +222,8 @@ Node.js 22 может кешировать скомпилированный ESM-
 
 ### Перед коммитом
 
-- `npx lefthook run pre-commit --force`
-- Проверить, что в diff не попали неожиданные файлы (`git status`, `git diff --stat HEAD`)
+- `npm run format` уже выполнен; полный цикл прогонит git-хук `pre-commit`.
+- Проверить, что в diff не попали неожиданные файлы (`git status`, `git diff --stat HEAD`).
 
 ### Перед переходом к следующему шагу
 
