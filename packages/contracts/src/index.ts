@@ -184,7 +184,11 @@ export const SandboxSchema = object({
       id: text(),
       title: text(),
       maskedNumber: text(),
-      scenario: Type.Union([Type.Literal('success'), Type.Literal('decline')]),
+      scenario: Type.Union([
+        Type.Literal('success'),
+        Type.Literal('decline'),
+        Type.Literal('cancel'),
+      ]),
     }),
   ),
 });

@@ -71,4 +71,10 @@ export const testCards = [
     maskedNumber: '•••• 0002',
     scenario: 'decline' as const,
   },
+  {
+    id: 'test-cancel',
+    title: 'Тестовая карта: отмена пользователем',
+    maskedNumber: '•••• 0003',
+    scenario: 'cancel' as const,
+  },
 ];
