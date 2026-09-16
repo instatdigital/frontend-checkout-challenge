@@ -165,15 +165,15 @@
 
 План: `docs/stage-6.md`
 
-### Этап 6.5. Рефакторинг DRY-2
+### Этап 6.5. Рефакторинг DRY-2 ✅
 
 Устранение дублирования после этапов 5–6, подготовка инфраструктуры для этапа 7.
 
-- 6.5.0: Узкие glob в lefthook — коммиты doc-файлов за 5с вместо 60с
-- 6.5.1: Хуки мутаций корзины (`useSetCartItem`, `useRemoveCartItem`) — убрать дублирование из CatalogPage/CartPage
-- 6.5.2: `useAuthPolling` — поллинг с токеном для этапа 7 (оплата)
-- 6.5.3: Общие тестовые хелперы (QueryClient wrapper, mock session)
-- 6.5.4: Документировать `as T` в transport.ts как обоснованное исключение
+- 6.5.0 ✅: Узкие glob в lefthook — коммиты doc-файлов за 5с вместо 60с
+- 6.5.1 ✅: Features-слой для мутаций корзины (`add-to-cart`, `update-cart-item`, `remove-cart-item`)
+- 6.5.2 ✅: `useAuthPolling` — поллинг с токеном для этапа 7 (оплата)
+- 6.5.3 ✅: Общие тестовые хелперы (createTestWrapper, defaultSession)
+- 6.5.4 ✅: Документировать `as T` в transport.ts как обоснованное исключение
 
 План: `docs/stage-6.5.md`
 
