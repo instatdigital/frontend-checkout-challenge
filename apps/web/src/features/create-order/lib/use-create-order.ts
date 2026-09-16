@@ -1,5 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useAuthMutation } from '@/entities/session';
 import { createOrder } from '@/entities/order';
+import { cartKeys } from '@/entities/cart';
 import { clearKey, saveKey } from '@/shared/lib/idempotency';
 import type { ApiRequestBody, ApiResponseData } from '@/shared/api/api-types';
 
@@ -12,13 +14,17 @@ type CreateOrderVars = {
 };
 
 export function useCreateOrder() {
+  const queryClient = useQueryClient();
   return useAuthMutation<OrderResponse, CreateOrderVars>(
     ({ body, idempotencyKey }, token) => {
       saveKey('order', idempotencyKey);
       return createOrder(body, token, idempotencyKey);
     },
     {
-      onSuccess: () => clearKey('order'),
+      onSuccess: () => {
+        clearKey('order');
+        void queryClient.invalidateQueries({ queryKey: cartKeys.detail() });
+      },
     },
   );
 }
