@@ -38,7 +38,9 @@ export function ProductCard({
           >
             −
           </button>
-          <span className={styles.quantity}>{quantity}</span>
+          <span className={styles.quantity} data-testid="quantity">
+            {quantity}
+          </span>
           <button
             className={clsx(styles.button, styles.button_control)}
             aria-label="Увеличить"
