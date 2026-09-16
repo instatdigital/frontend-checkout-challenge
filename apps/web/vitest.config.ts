@@ -1,16 +1,14 @@
-import { resolve } from 'node:path';
-import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vitest/config';
+import { defineConfig, mergeConfig } from 'vitest/config';
+import viteConfig from './vite.config.ts';
 
-export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: { '@': resolve(import.meta.dirname, 'src') },
-  },
-  test: {
-    environment: 'jsdom',
-    pool: 'vmThreads',
-    include: ['test/**/*.test.{ts,tsx}'],
-    passWithNoTests: true,
-  },
-});
+export default mergeConfig(
+  viteConfig,
+  defineConfig({
+    test: {
+      environment: 'jsdom',
+      pool: 'vmThreads',
+      include: ['test/**/*.test.{ts,tsx}'],
+      passWithNoTests: true,
+    },
+  }),
+);
