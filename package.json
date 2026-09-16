@@ -29,6 +29,7 @@
     "@types/node": "24.13.3",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
+    "lefthook": "2.1.12",
     "prettier": "3.9.6",
     "tsx": "4.23.13",
     "typescript": "5.9.3"
