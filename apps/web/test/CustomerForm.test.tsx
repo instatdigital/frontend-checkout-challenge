@@ -65,4 +65,14 @@ describe('CustomerForm', () => {
       expect(screen.getByText(error)).toBeInTheDocument();
     });
   });
+
+  it('accepts valid email', async () => {
+    renderWithForm();
+    const input = screen.getByLabelText('Email');
+    fireEvent.change(input, { target: { value: 'suhushinas@gmail.com' } });
+    fireEvent.blur(input);
+    await waitFor(() => {
+      expect(screen.queryByText('Некорректный email')).not.toBeInTheDocument();
+    });
+  });
 });

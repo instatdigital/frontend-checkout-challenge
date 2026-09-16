@@ -7,6 +7,19 @@ type CustomerFormProps = {
   control: Control<CheckoutFormValues>;
 };
 
+const INVALID_EMAIL_MESSAGE = 'Некорректный email';
+
+function validateEmail(value: unknown) {
+  if (typeof value !== 'string') return INVALID_EMAIL_MESSAGE;
+  if (/\s/.test(value)) return INVALID_EMAIL_MESSAGE;
+  if (!value.includes('@')) return INVALID_EMAIL_MESSAGE;
+  const [local, domain] = value.split('@');
+  if (!local || !domain || !domain.includes('.') || domain.endsWith('.')) {
+    return INVALID_EMAIL_MESSAGE;
+  }
+  return true;
+}
+
 export function CustomerForm({ control }: CustomerFormProps) {
   return (
     <div className={styles.root}>
@@ -26,7 +39,7 @@ export function CustomerForm({ control }: CustomerFormProps) {
         name="customer.email"
         rules={{
           required: 'Email обязателен',
-          pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]$/, message: 'Некорректный email' },
+          validate: validateEmail,
         }}
         label="Email"
         type="email"
