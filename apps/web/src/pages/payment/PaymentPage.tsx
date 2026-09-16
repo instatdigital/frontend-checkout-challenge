@@ -7,6 +7,7 @@ import { useCreateOrder } from '@/features/create-order';
 import { useCreatePayment, useSimulatePayment, usePaymentStatus } from '@/features/pay-by-card';
 import { QueryGuard } from '@/shared/ui/QueryGuard/QueryGuard';
 import { generateKey } from '@/shared/lib/idempotency';
+import { clearPaymentId, loadPaymentId, savePaymentId } from '@/shared/lib/payment-recovery';
 import styles from './PaymentPage.module.css';
 
 interface PaymentLocationState {
@@ -23,7 +24,9 @@ export function PaymentPage() {
 
   const [method, setMethod] = useState<'card' | 'cash_on_delivery'>('card');
   const [selectedCardId, setSelectedCardId] = useState<string>('');
-  const [paymentId, setPaymentId] = useState<string | undefined>(undefined);
+  const [paymentId, setPaymentId] = useState<string | undefined>(
+    () => loadPaymentId() ?? undefined,
+  );
 
   const orderKey = useMemo(() => generateKey(), []);
   const paymentKey = useMemo(() => generateKey(), []);
@@ -49,8 +52,13 @@ export function PaymentPage() {
   }, [paymentStatus]);
 
   useEffect(() => {
-    if (paymentStatus?.status === 'succeeded') {
+    if (!paymentStatus) return;
+
+    if (paymentStatus.status === 'succeeded') {
+      clearPaymentId();
       void navigate(`/orders/${paymentStatus.orderId}`);
+    } else if (TERMINAL_STATUSES.has(paymentStatus.status)) {
+      clearPaymentId();
     }
   }, [paymentStatus, navigate]);
 
@@ -80,6 +88,7 @@ export function PaymentPage() {
       body: { scenario: selectedCard.scenario },
     });
 
+    savePaymentId(payment.id);
     setPaymentId(payment.id);
   }, [
     quoteId,

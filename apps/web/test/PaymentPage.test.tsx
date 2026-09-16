@@ -34,7 +34,10 @@ vi.mock('@/entities/session/model/session-context', () => ({
   useSession: () => defaultSession,
 }));
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  localStorage.clear();
+});
 
 const customer: Customer = { name: 'Иван', email: 'ivan@example.test', phone: '+79990000000' };
 
@@ -122,6 +125,22 @@ describe('PaymentPage', () => {
         'test-token',
         expect.any(String),
       );
+    });
+  });
+
+  it('recovers saved payment id and continues polling', async () => {
+    localStorage.setItem('checkout_payment_id', 'payment-1');
+    vi.mocked(getSandbox).mockResolvedValue({ cards, settlementDelayMs: 1200 });
+    vi.mocked(getPayment).mockResolvedValue({ ...payment, status: 'succeeded' });
+
+    render(<PaymentPage />, { wrapper: createWrapper() });
+
+    await waitFor(() => {
+      expect(getPayment).toHaveBeenCalledWith('payment-1', 'test-token', expect.any(AbortSignal));
+    });
+
+    await waitFor(() => {
+      expect(localStorage.getItem('checkout_payment_id')).toBeNull();
     });
   });
 
