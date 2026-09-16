@@ -30,7 +30,6 @@ export function PaymentPage() {
   );
 
   const orderKey = useMemo(() => generateKey(), []);
-  const paymentKey = useMemo(() => generateKey(), []);
 
   const {
     data: sandbox,
@@ -91,7 +90,7 @@ export function PaymentPage() {
 
     const payment = await createPaymentMutation.mutateAsync({
       orderId: order.id,
-      idempotencyKey: paymentKey,
+      idempotencyKey: generateKey(),
     });
 
     await simulatePaymentMutation.mutateAsync({
@@ -107,7 +106,6 @@ export function PaymentPage() {
     method,
     selectedCard,
     orderKey,
-    paymentKey,
     createOrderMutation,
     createPaymentMutation,
     simulatePaymentMutation,
