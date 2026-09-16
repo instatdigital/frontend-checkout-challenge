@@ -1,12 +1,11 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { MemoryRouter } from 'react-router';
-import type { ReactNode } from 'react';
 import { CartPage } from '@/pages/cart';
 import { getCart } from '@/entities/cart';
 import type { Cart } from '@checkout/contracts';
+import { createTestWrapper } from './helpers/create-wrapper';
+import { defaultSession } from './helpers/mock-session';
 
 vi.mock('@/entities/cart', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/entities/cart')>();
@@ -19,21 +18,12 @@ vi.mock('@/entities/cart', async (importOriginal) => {
 });
 
 vi.mock('@/entities/session/model/session-context', () => ({
-  useSession: () => ({ token: 'test-token', sessionId: 's-1', isLoading: false, error: null }),
+  useSession: () => defaultSession,
 }));
 
 afterEach(cleanup);
 
-function wrapper({ children }: { children: ReactNode }) {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-  return (
-    <MemoryRouter>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </MemoryRouter>
-  );
-}
+const wrapper = createTestWrapper({ withRouter: true });
 
 const cart: Cart = {
   id: 'cart-1',

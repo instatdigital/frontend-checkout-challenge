@@ -1,22 +1,18 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import type { ReactNode } from 'react';
 import { useApiQuery, useApiMutation } from '@/shared/api/hooks';
 import { usePolling } from '@/shared/api/hooks/use-polling';
 import { ApiError } from '@/shared/api/errors';
+import { createTestWrapper } from './helpers/create-wrapper';
 
-function createWrapper() {
-  const queryClient = new QueryClient({
+const wrapper = createTestWrapper({
+  queryClientOptions: {
     defaultOptions: {
       queries: { retry: false, gcTime: 0 },
       mutations: { retry: false },
     },
-  });
-  return ({ children }: { children: ReactNode }) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
-}
+  },
+});
 
 describe('useApiQuery', () => {
   beforeEach(() => vi.restoreAllMocks());
@@ -26,7 +22,7 @@ describe('useApiQuery', () => {
     const fetcher = vi.fn().mockResolvedValue(data);
 
     const { result } = renderHook(() => useApiQuery(['product', 'p1'], fetcher), {
-      wrapper: createWrapper(),
+      wrapper,
     });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -39,7 +35,7 @@ describe('useApiQuery', () => {
       .mockRejectedValue(new ApiError(401, 'SESSION_REQUIRED', 'Токен не передан'));
 
     const { result } = renderHook(() => useApiQuery(['cart'], fetcher), {
-      wrapper: createWrapper(),
+      wrapper,
     });
 
     await waitFor(() => expect(result.current.isError).toBe(true));
@@ -50,7 +46,7 @@ describe('useApiQuery', () => {
     const fetcher = vi.fn().mockResolvedValue({ id: 'p1' });
 
     const { result } = renderHook(() => useApiQuery(['product', 'p1'], fetcher), {
-      wrapper: createWrapper(),
+      wrapper,
     });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -68,7 +64,7 @@ describe('useApiMutation', () => {
     const mutationFn = vi.fn().mockResolvedValue({ id: 'order-1' });
 
     const { result } = renderHook(() => useApiMutation(mutationFn), {
-      wrapper: createWrapper(),
+      wrapper,
     });
 
     result.current.mutate({ quoteId: 'q1' });
@@ -82,7 +78,7 @@ describe('useApiMutation', () => {
       .mockRejectedValue(new ApiError(409, 'CART_VERSION_CONFLICT', 'Конфликт версии'));
 
     const { result } = renderHook(() => useApiMutation(mutationFn), {
-      wrapper: createWrapper(),
+      wrapper,
     });
 
     result.current.mutate({});
@@ -108,7 +104,7 @@ describe('usePolling', () => {
     const shouldStop = (d: { status: string }) => d.status !== 'pending';
 
     const { result } = renderHook(() => usePolling(['payment', 'p1'], fetcher, shouldStop, 1000), {
-      wrapper: createWrapper(),
+      wrapper,
     });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -127,7 +123,7 @@ describe('usePolling', () => {
     const shouldStop = () => false;
 
     const { unmount } = renderHook(() => usePolling(['payment', 'p2'], fetcher, shouldStop, 1000), {
-      wrapper: createWrapper(),
+      wrapper,
     });
 
     await waitFor(() => expect(fetcher).toHaveBeenCalledTimes(1));

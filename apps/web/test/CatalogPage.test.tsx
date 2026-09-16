@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import type { ReactNode } from 'react';
 import { CatalogPage } from '@/pages/catalog';
 import { listProducts } from '@/entities/product';
+import { createTestWrapper } from './helpers/create-wrapper';
+import { defaultSession } from './helpers/mock-session';
 
 vi.mock('@/entities/product', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/entities/product')>();
@@ -20,17 +20,12 @@ vi.mock('@/entities/cart', () => ({
 }));
 
 vi.mock('@/entities/session/model/session-context', () => ({
-  useSession: () => ({ token: 'test-token', sessionId: 's-1', isLoading: false, error: null }),
+  useSession: () => defaultSession,
 }));
 
 afterEach(cleanup);
 
-function wrapper({ children }: { children: ReactNode }) {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
-}
+const wrapper = createTestWrapper();
 
 const products = [
   {
