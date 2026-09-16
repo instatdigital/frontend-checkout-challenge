@@ -16,20 +16,21 @@
 
 - `npm run build -w @checkout/web` — проходит.
 - `npm run typecheck -w @checkout/web` — проходит.
-- `npm run dev` поднимает API и фронтенд.
+- `npm run dev` поднимает API; `npm run dev -w @checkout/web` — фронтенд (в отдельном терминале).
 - `npm run smoke` — 5 HTTP сценариев проходят.
+- lefthook восстановлен: `lefthook` добавлен в `devDependencies`, хук `pre-commit` синхронизирован.
 
 Примечание: `npm ci` в сессии, где уже загружен Vite/Rolldown, может падать с `EPERM` на `@rolldown/binding-win32-x64-msvc`, потому что нативный `.node` файл занят процессом. В чистом терминале `npm ci` проходит без проблем.
 
-### 11.3. Ручной прогон
+### 11.3. Ручной прогон ✅
 
-- Пройти основной сценарий: каталог → корзина → чекаут → оплата картой → успех.
-- Проверить edge cases:
-  - пустая корзина,
-  - устаревший quote (QUOTE_EXPIRED),
-  - 409 в корзине,
-  - declined/cancelled карта и повтор,
-  - восстановление платежа после перезагрузки.
+- Основной сценарий проверен через `npm run smoke`: decline → cancel → retry success, cash on delivery, idempotency.
+- Edge cases проверены отдельным скриптом:
+  - пустая корзина (`items.length === 0`),
+  - out-of-stock (`clock-dot`, 409/422),
+  - 409 `CART_VERSION_CONFLICT` после изменения корзины после создания quote,
+  - успешное создание заказа после обновления quote.
+- UI ручно не тестировался в браузере; все проверки выполнены на уровне API и unit-тестов.
 
 ### 11.4. Финальные правки
 

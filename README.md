@@ -16,10 +16,14 @@
 git clone https://github.com/instatdigital/frontend-checkout-challenge.git
 cd frontend-checkout-challenge
 npm ci
-npm run dev
+npm run dev          # API в текущем терминале
 ```
 
-Команда `npm run dev` запускает и API, и фронтенд.
+В отдельном терминале запустите фронтенд:
+
+```sh
+npm run dev -w @checkout/web
+```
 
 Swagger: [http://localhost:4000/docs/](http://localhost:4000/docs/). Спецификация: [http://localhost:4000/openapi.json](http://localhost:4000/openapi.json) или [файл в репозитории](docs/openapi.json).
 

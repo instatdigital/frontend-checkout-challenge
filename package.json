@@ -13,6 +13,7 @@
   },
   "scripts": {
     "dev": "npm run build -w @checkout/contracts && npm run dev -w @checkout/api",
+    "dev:web": "npm run dev -w @checkout/web",
     "build": "npm run build -w @checkout/contracts && npm run build -w @checkout/api",
     "start": "npm run start -w @checkout/api",
     "test": "npm run build && npm run test -w @checkout/api",
