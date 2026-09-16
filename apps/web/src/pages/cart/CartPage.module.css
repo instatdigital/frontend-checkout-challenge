@@ -27,8 +27,9 @@
 
 .footer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: stretch;
   padding-top: var(--space-4);
   border-top: 2px solid var(--color-neutral-800);
 }
@@ -40,6 +41,8 @@
 }
 
 .checkout {
+  display: inline-block;
+  text-align: center;
   padding: var(--space-3) var(--space-6);
   background: var(--color-neutral-800);
   color: var(--color-surface);
@@ -52,4 +55,12 @@
 
 .checkout:hover {
   background: var(--color-neutral-700);
+}
+
+@media (min-width: 1280px) {
+  .footer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 }

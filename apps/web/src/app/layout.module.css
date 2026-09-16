@@ -5,7 +5,7 @@
 }
 
 .header {
-  padding: var(--space-4) var(--space-6);
+  padding: var(--space-3) var(--space-4);
   border-bottom: var(--border-width) solid var(--color-neutral-200);
 }
 
@@ -16,9 +16,19 @@
 
 .main {
   flex: 1;
-  padding: var(--space-6);
+  padding: var(--space-4);
   max-width: var(--container-lg);
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
+}
+
+@media (min-width: 1280px) {
+  .header {
+    padding: var(--space-4) var(--space-6);
+  }
+
+  .main {
+    padding: var(--space-6);
+  }
 }

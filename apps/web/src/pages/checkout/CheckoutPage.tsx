@@ -49,7 +49,7 @@ export function CheckoutPage() {
     <div className={styles.root}>
       <h1 className={styles.title}>Оформление заказа</h1>
       <QueryGuard isLoading={isLoading} error={error}>
-        <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate>
+        <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate className={styles.form}>
           <CustomerForm control={control} />
           <DeliveryForm deliveryMethods={deliveryMethods} control={control} />
           {quote && (

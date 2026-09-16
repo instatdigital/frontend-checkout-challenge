@@ -62,11 +62,12 @@
 
 **≈ 100 строк**
 
-### Шаг 7. Адаптив (390px / 1280px)
+### Шаг 7. Адаптив (390px / 1280px) ✅
 
-- Медиа-запросы через CSS-переменные или @media
-- Mobile-first: форма на всю ширину, кнопки full-width
-- Desktop: контейнер 800px, форма в две колонки (контакты + доставка)
+- Медиа-запросы через @media (min-width: 1280px)
+- Mobile-first: форма на всю ширину, кнопки full-width, footer stack
+- Desktop: Layout padding увеличен, CatalogPage grid auto-fill, CartPage footer row
+- CheckoutPage: grid 2 колонки (контакты + доставка), кнопка auto-width
 
 **≈ 60 строк**
 
