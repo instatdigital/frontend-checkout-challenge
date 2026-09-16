@@ -24,6 +24,8 @@ export async function apiRequest<T>(
     });
 
     if (!response.ok) return await parseErrorResponse(response);
+    // 204 no-content и развёртка конверта — единственные места с `as T`:
+    // generic-транспорт не может статически проверить runtime-тип, его гарантирует вызывающий через T.
     if (response.status === 204) return undefined as T;
 
     const envelope = await response.json();

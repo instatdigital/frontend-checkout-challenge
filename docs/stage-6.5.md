@@ -165,14 +165,14 @@ export { useRemoveCartItem } from './lib/use-remove-cart-item';
 
 **Результат:** обёртка QueryClient в одном месте, значения сессии — в `defaultSession`. `vi.mock` остаётся в тест-файлах (ограничение Vitest). 76 тестов проходят.
 
-### 6.5.4. (опционально) Документировать `as T` в transport.ts
+### 6.5.4. Документировать `as T` в transport.ts ✅
 
 **Зачем:** конвенция запрещает `as Type`, но в generic-транспорте это неизбежный limitation TypeScript.
 
-**Что делаем:**
+**Что сделано (отличается от плана):**
 
-- Добавить комментарий-обоснование к двум `as T` в `shared/api/transport.ts` (строки 27, 30)
-- Формат: `// eslint-disable-next-line @typescript-eslint/no-explicit-any — justified: generic transport, T determined by caller`
+- В `shared/api/transport.ts` добавлен комментарий-обоснование к двум `as T` (204 no-content и развёртка конверта): generic-транспорт не может статически проверить runtime-тип, его гарантирует вызывающий через `T`.
+- **НЕ добавлен `eslint-disable-next-line no-explicit-any`** — он не нужен: каст `as T` с generic не является `any`, линт и так проходит. Отключение правила было бы лишним шумом.
 
 **Результат:** явное обоснование исключения, а не молчаливое нарушение.
 
