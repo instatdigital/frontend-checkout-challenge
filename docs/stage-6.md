@@ -75,7 +75,8 @@
 
 ## Итого: 7 шагов, ~410 строк
 
-## Финальная проверка
+## Финальная проверка ✅
 
-После шага 7 — проверить, что каждый токен из `tokens.css` используется хотя бы в одном CSS-файле.
-Неиспользуемые — удалить.
+Удалены 22 неиспользуемых токена: primary-50/100/200/700, neutral-100, error-50, success-50/500/700,
+font-weight-normal, line-height-tight, space-8/12, radius-lg, shadow-sm/md, duration-normal,
+container-sm, breakpoint-mobile/desktop.

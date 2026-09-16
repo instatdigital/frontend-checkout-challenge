@@ -85,6 +85,8 @@ git diff --stat HEAD -- ':!package-lock.json'
 - Доступ к классам: dot-нотация `styles.root`, `styles.title`, `styles.input_error`
 - Компонент = папка внутри entity: `entities/product/ui/ProductCard.tsx` + `ProductCard.module.css`
 - Глобальный файл — только сброс и CSS-переменные (в `app/styles/index.css`)
+- Брейкпоинты: `@custom-media --desktop (min-width: 960px)` в `app/styles/breakpoints.css`, обработка через `postcss-custom-media`
+- В .module.css: `@import '../../app/styles/breakpoints.css'` + `@media (--desktop) { ... }`
 - Компонент и хук/тип/контекст — в разных файлах (fast refresh)
 - Условные классы — через `clsx` объектный синтаксис: `clsx(styles.input, { [styles.input_error]: condition })`
 
