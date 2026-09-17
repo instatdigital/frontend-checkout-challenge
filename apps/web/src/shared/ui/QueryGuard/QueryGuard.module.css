@@ -1,0 +1,15 @@
+.root {
+  margin: 0;
+  padding: var(--space-4) 0;
+}
+
+.root_loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+}
+
+.root_error {
+  color: var(--color-error-text);
+}

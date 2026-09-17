@@ -1,7 +1,24 @@
-# Ваш фронтенд
+# @checkout/web
 
-Добавьте сюда приложение на React и TypeScript. Назовите workspace `@checkout/web`, добавьте его зависимости и команды запуска в своём решении.
+Фронтенд магазина: каталог, корзина, оформление заказа и оплата.
 
-Условия: [задание](../../docs/ASSIGNMENT.md). API: [интеграция](../../docs/INTEGRATION.md).
+## Запуск
 
-[Критерии оценки](../../docs/EVALUATION.md).
+```sh
+npm run dev -w @checkout/web
+```
+
+Фронтенд запускается на `http://localhost:5173`. API должен работать на `http://127.0.0.1:4000`.
+
+## Сборка
+
+```sh
+npm run build -w @checkout/web
+```
+
+## Проверки
+
+```sh
+npm run lint -w @checkout/web
+npm run test -w @checkout/web
+```

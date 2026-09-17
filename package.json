@@ -13,6 +13,7 @@
   },
   "scripts": {
     "dev": "npm run build -w @checkout/contracts && npm run dev -w @checkout/api",
+    "dev:web": "npm run dev -w @checkout/web",
     "build": "npm run build -w @checkout/contracts && npm run build -w @checkout/api",
     "start": "npm run start -w @checkout/api",
     "test": "npm run build && npm run test -w @checkout/api",
@@ -29,6 +30,7 @@
     "@types/node": "24.13.3",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
+    "lefthook": "2.1.12",
     "prettier": "3.9.6",
     "tsx": "4.23.13",
     "typescript": "5.9.3"
@@ -36,5 +38,9 @@
   "allowScripts": {
     "esbuild@0.28.2": true,
     "fsevents@2.3.3": true
+  },
+  "volta": {
+    "node": "24.21.0",
+    "npm": "11.19.1"
   }
 }

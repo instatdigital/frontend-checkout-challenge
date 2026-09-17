@@ -184,7 +184,11 @@ export const SandboxSchema = object({
       id: text(),
       title: text(),
       maskedNumber: text(),
-      scenario: Type.Union([Type.Literal('success'), Type.Literal('decline')]),
+      scenario: Type.Union([
+        Type.Literal('success'),
+        Type.Literal('decline'),
+        Type.Literal('cancel'),
+      ]),
     }),
   ),
 });
@@ -201,8 +205,14 @@ export const IdempotencyHeaders = Type.Object({
   }),
 });
 
+export type Session = Static<typeof SessionSchema>;
+export type SessionInfo = Static<typeof SessionInfoSchema>;
 export type Product = Static<typeof ProductSchema>;
+export type CartItem = Static<typeof CartItemSchema>;
 export type Cart = Static<typeof CartSchema>;
+export type SetCartItem = Static<typeof SetCartItemBody>;
+export type CheckoutOptions = Static<typeof CheckoutOptionsSchema>;
+export type CreateQuote = Static<typeof QuoteBody>;
 export type Delivery = Static<typeof DeliverySchema>;
 export type Customer = Static<typeof CustomerSchema>;
 export type Quote = Static<typeof QuoteSchema>;
